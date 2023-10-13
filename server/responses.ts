@@ -7,8 +7,8 @@ import { FeatureActiveError, FeatureInactiveError } from "./concepts/feature";
 import { AlreadyAppliedError, EmployerApplicantMatchError, JobDoc, JobEmployerNotMatchError, NotAppliedError } from "./concepts/job";
 import { AlreadyLikedError, LikeAuthorNotMatchError, LikeDoc, NotLikedError } from "./concepts/like";
 import { MessageDoc } from "./concepts/message";
+import { PortfolioDoc } from "./concepts/portfolio";
 import { PostAuthorNotMatchError, PostDoc } from "./concepts/post";
-import { ProfileDoc } from "./concepts/profile";
 import { ReviewDoc } from "./concepts/review";
 import { Router } from "./framework/router";
 
@@ -151,36 +151,36 @@ export default class Responses {
   }
 
   /**
-   * Convert ProfileDoc into more readable format for the frontend by converting the author id into a username
+   * Convert PortfolioDoc into more readable format for the frontend by converting the author id into a username
    * and post ids into posts
    */
-  static async profile(profile: ProfileDoc | null) {
-    if (!profile) {
-      return profile;
+  static async portfolio(portfolio: PortfolioDoc | null) {
+    if (!portfolio) {
+      return portfolio;
     }
-    const owner = await User.getUserById(profile.owner);
+    const owner = await User.getUserById(portfolio.owner);
     const content = [];
-    for (const p of profile.content) {
+    for (const p of portfolio.content) {
       const post = await Post.getPostById(p);
       content.push(await Responses.post(post));
     }
-    return { ...profile, owner: owner.username, content: content };
+    return { ...portfolio, owner: owner.username, content: content };
   }
 
   /**
-   * Same as {@link profile} but for an array of ProfileDoc for improved performance.
+   * Same as {@link portfolio} but for an array of PortfolioDoc for improved performance.
    */
-  static async profiles(profiles: ProfileDoc[]) {
+  static async portfolios(portfolios: PortfolioDoc[]) {
     const result = [];
-    for (const p of profiles) {
-      const profileResp = await Responses.profile(p);
-      result.push(profileResp);
+    for (const p of portfolios) {
+      const portfolioResp = await Responses.portfolio(p);
+      result.push(portfolioResp);
     }
     return result;
   }
 }
 
-// TODO add for other errors (profile, etc)
+// TODO add for other errors (portfolio, etc)
 Router.registerError(PostAuthorNotMatchError, async (e) => {
   const username = (await User.getUserById(e.author)).username;
   return e.formatWith(username, e._id);

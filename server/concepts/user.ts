@@ -6,7 +6,7 @@ export interface UserDoc extends BaseDoc {
   username: string;
   password: string;
   role: "Spectator" | "Artist";
-  profile?: ObjectId;
+  portfolio?: ObjectId;
 }
 
 export default class UserConcept {
@@ -83,12 +83,12 @@ export default class UserConcept {
     }
   }
 
-  async getProfile(_id: ObjectId) {
-    const maybeProfile = (await this.users.readOne({ _id }))?.profile;
-    if (!maybeProfile) {
-      throw new NotFoundError("User does not have a profile!");
+  async getPortfolio(_id: ObjectId) {
+    const maybePortfolio = (await this.users.readOne({ _id }))?.portfolio;
+    if (!maybePortfolio) {
+      throw new NotFoundError("User does not have a portfolio!");
     }
-    return maybeProfile;
+    return maybePortfolio;
   }
 
   private async canCreate(username: string, password: string) {
@@ -104,19 +104,19 @@ export default class UserConcept {
     }
   }
 
-  async canHaveProfile(_id: ObjectId) {
+  async canHavePortfolio(_id: ObjectId) {
     const user = await this.users.readOne({ _id });
     if (!user) {
       throw new NotFoundError("User not found!");
     }
     if (user.role === "Spectator") {
-      throw new SpectatorProfileError();
+      throw new SpectatorPortfolioError();
     }
   }
 }
 
-export class SpectatorProfileError extends NotAllowedError {
+export class SpectatorPortfolioError extends NotAllowedError {
   constructor() {
-    super("Spectators cannot have profiles!");
+    super("Spectators cannot have portfolios!");
   }
 }

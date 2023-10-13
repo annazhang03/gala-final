@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { Comment, Connection, Favorite, Feature, Job, Like, Message, Post, Profile, Review, User, WebSession } from "./app";
+import { Comment, Connection, Favorite, Feature, Job, Like, Message, Portfolio, Post, Review, User, WebSession } from "./app";
 import { CommentDoc } from "./concepts/comment";
 import { JobDoc } from "./concepts/job";
 import { MessageDoc } from "./concepts/message";
@@ -37,12 +37,12 @@ class Routes {
   @Router.patch("/users")
   async updateUser(session: WebSessionDoc, update: Partial<UserDoc>) {
     const user = WebSession.getUser(session);
-    if (update.profile) {
-      await Profile.isOwner(user, update.profile);
-      await User.canHaveProfile(user);
+    if (update.portfolio) {
+      await Portfolio.isOwner(user, update.portfolio);
+      await User.canHavePortfolio(user);
     }
     if (update.role === "Spectator") {
-      update.profile = undefined;
+      update.portfolio = undefined;
     }
     return await User.update(user, update);
   }
@@ -388,26 +388,26 @@ class Routes {
     return await Message.sendMessage(user, toId, content);
   }
 
-  // routes for Profile concept
-  @Router.get("/profile")
-  async getProfiles(session: WebSessionDoc) {
+  // routes for Portfolio concept
+  @Router.get("/portfolio")
+  async getPortfolios(session: WebSessionDoc) {
     const user = WebSession.getUser(session);
-    const profiles = await Profile.getProfiles(user);
-    return await Responses.profiles(profiles);
+    const portfolios = await Portfolio.getPortfolios(user);
+    return await Responses.portfolios(portfolios);
   }
 
-  @Router.get("/profile/:owner")
-  async getUserProfile(owner: string) {
+  @Router.get("/portfolio/:owner")
+  async getUserPortfolio(owner: string) {
     const id = (await User.getUserByUsername(owner))._id;
-    const profile = await User.getProfile(id);
-    const profileObj = await Profile.getProfileById(profile);
-    return await Responses.profile(profileObj);
+    const portfolio = await User.getPortfolio(id);
+    const portfolioObj = await Portfolio.getPortfolioById(portfolio);
+    return await Responses.portfolio(portfolioObj);
   }
 
-  @Router.post("/profile")
-  async createProfile(session: WebSessionDoc, content: string, bio: string) {
+  @Router.post("/portfolio")
+  async createPortfolio(session: WebSessionDoc, content: string, bio: string) {
     const user = WebSession.getUser(session);
-    await User.canHaveProfile(user);
+    await User.canHavePortfolio(user);
     const contentIds: ObjectId[] = [];
     for (const post of content.split(",")) {
       const postId = new ObjectId(post.trim());
@@ -415,15 +415,15 @@ class Routes {
       const postObj = await Post.getPostById(postId);
       contentIds.push(postObj._id);
     }
-    const created = await Profile.create(user, contentIds, bio);
-    return { msg: created.msg, profile: await Responses.profile(created.profile) };
+    const created = await Portfolio.create(user, contentIds, bio);
+    return { msg: created.msg, portfolio: await Responses.portfolio(created.portfolio) };
   }
 
-  @Router.delete("/profile/:_id")
-  async deleteProfile(session: WebSessionDoc, _id: ObjectId) {
+  @Router.delete("/portfolio/:_id")
+  async deletePortfolio(session: WebSessionDoc, _id: ObjectId) {
     const user = WebSession.getUser(session);
-    await Profile.isOwner(user, _id);
-    return Profile.delete(_id);
+    await Portfolio.isOwner(user, _id);
+    return Portfolio.delete(_id);
   }
 
   // routes for Feature concept
@@ -431,9 +431,9 @@ class Routes {
   @Router.get("/featured")
   async getFeatured() {
     const feature = await Feature.getFeatured();
-    const profile = await User.getProfile(feature.user);
-    const profileObj = await Profile.getProfileById(profile);
-    return await Responses.profile(profileObj);
+    const portfolio = await User.getPortfolio(feature.user);
+    const portfolioObj = await Portfolio.getPortfolioById(portfolio);
+    return await Responses.portfolio(portfolioObj);
   }
 
   @Router.post("/featured")
