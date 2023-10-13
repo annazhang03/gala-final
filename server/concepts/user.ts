@@ -5,14 +5,16 @@ import { BadValuesError, NotAllowedError, NotFoundError } from "./errors";
 export interface UserDoc extends BaseDoc {
   username: string;
   password: string;
+  role: "Spectator" | "Artist";
+  profile?: ObjectId;
 }
 
 export default class UserConcept {
   public readonly users = new DocCollection<UserDoc>("users");
 
-  async create(username: string, password: string) {
+  async create(username: string, password: string, role: "Spectator" | "Artist" = "Artist") {
     await this.canCreate(username, password);
-    const _id = await this.users.createOne({ username, password });
+    const _id = await this.users.createOne({ username, password, role });
     return { msg: "User created successfully!", user: await this.users.readOne({ _id }) };
   }
 
@@ -81,6 +83,14 @@ export default class UserConcept {
     }
   }
 
+  async getProfile(_id: ObjectId) {
+    const maybeProfile = (await this.users.readOne({ _id }))?.profile;
+    if (!maybeProfile) {
+      throw new NotFoundError("User does not have a profile!");
+    }
+    return maybeProfile;
+  }
+
   private async canCreate(username: string, password: string) {
     if (!username || !password) {
       throw new BadValuesError("Username and password must be non-empty!");
@@ -92,5 +102,21 @@ export default class UserConcept {
     if (await this.users.readOne({ username })) {
       throw new NotAllowedError(`User with username ${username} already exists!`);
     }
+  }
+
+  async canHaveProfile(_id: ObjectId) {
+    const user = await this.users.readOne({ _id });
+    if (!user) {
+      throw new NotFoundError("User not found!");
+    }
+    if (user.role === "Spectator") {
+      throw new SpectatorProfileError();
+    }
+  }
+}
+
+export class SpectatorProfileError extends NotAllowedError {
+  constructor() {
+    super("Spectators cannot have profiles!");
   }
 }

@@ -2,20 +2,20 @@ import { ObjectId } from "mongodb";
 import DocCollection, { BaseDoc } from "../framework/doc";
 import { NotAllowedError, NotFoundError } from "./errors";
 
-export interface FriendshipDoc extends BaseDoc {
+export interface ConnectionDoc extends BaseDoc {
   user1: ObjectId;
   user2: ObjectId;
 }
 
-export interface FriendRequestDoc extends BaseDoc {
+export interface ConnectionRequestDoc extends BaseDoc {
   from: ObjectId;
   to: ObjectId;
   status: "pending" | "rejected" | "accepted";
 }
 
-export default class FriendConcept {
-  public readonly friends = new DocCollection<FriendshipDoc>("friends");
-  public readonly requests = new DocCollection<FriendRequestDoc>("friendRequests");
+export default class ConnectionConcept {
+  public readonly connections = new DocCollection<ConnectionDoc>("connections");
+  public readonly requests = new DocCollection<ConnectionRequestDoc>("connectionRequests");
 
   async getRequests(user: ObjectId) {
     return await this.requests.readMany({
@@ -33,7 +33,7 @@ export default class FriendConcept {
     await this.removePendingRequest(from, to);
     // Following two can be done in parallel, thus we use `void`
     void this.requests.createOne({ from, to, status: "accepted" });
-    void this.addFriend(from, to);
+    void this.addConnection(from, to);
     return { msg: "Accepted request!" };
   }
 
@@ -48,63 +48,63 @@ export default class FriendConcept {
     return { msg: "Removed request!" };
   }
 
-  async removeFriend(user: ObjectId, friend: ObjectId) {
-    const friendship = await this.friends.popOne({
+  async removeConnection(user: ObjectId, connection: ObjectId) {
+    const connectionObj = await this.connections.popOne({
       $or: [
-        { user1: user, user2: friend },
-        { user1: friend, user2: user },
+        { user1: user, user2: connection },
+        { user1: connection, user2: user },
       ],
     });
-    if (friendship === null) {
-      throw new FriendNotFoundError(user, friend);
+    if (connectionObj === null) {
+      throw new ConnectionNotFoundError(user, connection);
     }
-    return { msg: "Unfriended!" };
+    return { msg: "Disconnected!" };
   }
 
-  async getFriends(user: ObjectId) {
-    const friendships = await this.friends.readMany({
+  async getConnections(user: ObjectId) {
+    const connections = await this.connections.readMany({
       $or: [{ user1: user }, { user2: user }],
     });
     // Making sure to compare ObjectId using toString()
-    return friendships.map((friendship) => (friendship.user1.toString() === user.toString() ? friendship.user2 : friendship.user1));
+    return connections.map((connection) => (connection.user1.toString() === user.toString() ? connection.user2 : connection.user1));
   }
 
-  async areFriends(u1: ObjectId, u2: ObjectId) {
-    const friendship = await this.friends.readOne({
+  async areConnected(u1: ObjectId, u2: ObjectId) {
+    const connection = await this.connections.readOne({
       $or: [
         { user1: u1, user2: u2 },
         { user1: u2, user2: u1 },
       ],
     });
-    return friendship !== null;
+    return connection !== null;
   }
 
-  private async addFriend(user1: ObjectId, user2: ObjectId) {
-    void this.friends.createOne({ user1, user2 });
+  async addConnection(user1: ObjectId, user2: ObjectId) {
+    void this.connections.createOne({ user1, user2 });
   }
 
   private async removePendingRequest(from: ObjectId, to: ObjectId) {
     const request = await this.requests.popOne({ from, to, status: "pending" });
     if (request === null) {
-      throw new FriendRequestNotFoundError(from, to);
+      throw new ConnectionRequestNotFoundError(from, to);
     }
     return request;
   }
 
-  private async isNotFriends(u1: ObjectId, u2: ObjectId) {
-    const friendship = await this.friends.readOne({
+  private async isNotConnected(u1: ObjectId, u2: ObjectId) {
+    const connection = await this.connections.readOne({
       $or: [
         { user1: u1, user2: u2 },
         { user1: u2, user2: u1 },
       ],
     });
-    if (friendship !== null || u1.toString() === u2.toString()) {
-      throw new AlreadyFriendsError(u1, u2);
+    if (connection !== null || u1.toString() === u2.toString()) {
+      throw new AlreadyConnectedError(u1, u2);
     }
   }
 
   private async canSendRequest(u1: ObjectId, u2: ObjectId) {
-    await this.isNotFriends(u1, u2);
+    await this.isNotConnected(u1, u2);
     // check if there is pending request between these users
     const request = await this.requests.readOne({
       from: { $in: [u1, u2] },
@@ -112,43 +112,43 @@ export default class FriendConcept {
       status: "pending",
     });
     if (request !== null) {
-      throw new FriendRequestAlreadyExistsError(u1, u2);
+      throw new ConnectionRequestAlreadyExistsError(u1, u2);
     }
   }
 }
 
-export class FriendRequestNotFoundError extends NotFoundError {
+export class ConnectionRequestNotFoundError extends NotFoundError {
   constructor(
     public readonly from: ObjectId,
     public readonly to: ObjectId,
   ) {
-    super("Friend request from {0} to {1} does not exist!", from, to);
+    super("Connection request from {0} to {1} does not exist!", from, to);
   }
 }
 
-export class FriendRequestAlreadyExistsError extends NotAllowedError {
+export class ConnectionRequestAlreadyExistsError extends NotAllowedError {
   constructor(
     public readonly from: ObjectId,
     public readonly to: ObjectId,
   ) {
-    super("Friend request between {0} and {1} already exists!", from, to);
+    super("Connection request between {0} and {1} already exists!", from, to);
   }
 }
 
-export class FriendNotFoundError extends NotFoundError {
+export class ConnectionNotFoundError extends NotFoundError {
   constructor(
     public readonly user1: ObjectId,
     public readonly user2: ObjectId,
   ) {
-    super("Friendship between {0} and {1} does not exist!", user1, user2);
+    super("Connection between {0} and {1} does not exist!", user1, user2);
   }
 }
 
-export class AlreadyFriendsError extends NotAllowedError {
+export class AlreadyConnectedError extends NotAllowedError {
   constructor(
     public readonly user1: ObjectId,
     public readonly user2: ObjectId,
   ) {
-    super("{0} and {1} are already friends!", user1, user2);
+    super("{0} and {1} are already connected!", user1, user2);
   }
 }
