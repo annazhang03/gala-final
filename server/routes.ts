@@ -19,7 +19,10 @@ class Routes {
   }
 
   @Router.get("/users")
-  async getUsers() {
+  async getUsers(username?: string) {
+    if (username) {
+      return [await User.getUserByUsername(username)];
+    }
     return await User.getUsers();
   }
 
