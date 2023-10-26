@@ -37,19 +37,6 @@ async function getPosts(author?: string) {
       return;
     }
   }
-  // if (props.author !== undefined) {
-  //   query = { author: props.author };
-  // } else if (author !== undefined) {
-  //   query = { author };
-  // } else {
-  //   query = {};
-  // }
-  // let postResults;
-  // try {
-  //   postResults = await fetchy("api/posts", "GET", { query });
-  // } catch (_) {
-  //   return;
-  // }
   searchAuthor.value = author ? author : "";
   posts.value = postResults;
 }
@@ -59,11 +46,8 @@ function updateEditing(id: string) {
 }
 
 onBeforeMount(async () => {
-  // await getPosts();
   if (props.own) {
     await getPosts(currentUsername.value);
-    // } else if (props.author) {
-    //   await getPosts(props.author);
   } else {
     await getPosts();
   }

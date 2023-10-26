@@ -1,22 +1,12 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
-import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import ConnectionComponent from "./ConnectionComponent.vue";
-
-const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
 let connections = ref<Array<Record<string, string>>>([]);
 
 async function getConnections() {
-  //   let query: Record<string, string>;
-  //   if (props.own) {
-  //     query = { subject: currentUsername.value };
-  //   } else {
-  //     query = { subject: props.username };
-  //   }
   let results;
   try {
     results = await fetchy("/api/connections", "GET");
@@ -26,10 +16,6 @@ async function getConnections() {
   connections.value = results;
 }
 
-// function updateEditing(id: string) {
-//   editing.value = id;
-// }
-
 onBeforeMount(async () => {
   await getConnections();
   loaded.value = true;
@@ -37,12 +23,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <!-- <div v-if="!props.own">
-    <section v-if="isLoggedIn && props.username !== currentUsername">
-      <h3>Create a review:</h3>
-      <CreateReviewForm :username="props.username" @refreshReviews="getReviews" />
-    </section>
-  </div> -->
   <div class="row">
     <h3>Your connections:</h3>
   </div>

@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["fan"]);
 const emit = defineEmits(["refreshFans"]);
-const { currentUsername } = storeToRefs(useUserStore());
 
 const removeFan = async () => {
   try {

@@ -5,9 +5,8 @@ import ConnectionRequestList from "@/components/Connection/ConnectionRequestList
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 
-const { currentUsername, currentRole } = storeToRefs(useUserStore());
+const { currentUsername } = storeToRefs(useUserStore());
 const { updateSession } = useUserStore();
-// const isArtist = currentRole.value == "artist";
 void updateSession();
 </script>
 
@@ -17,11 +16,7 @@ void updateSession();
     <h1>{{ currentUsername }}'s connection requests</h1>
     <ConnectionRequestList />
     <h1>{{ currentUsername }}'s connections</h1>
-    <!-- <div v-if="isArtist"> -->
     <ConnectionListComponent />
-    <!-- <UserReviewsComponent :own="true" /> -->
-    <!-- </div> -->
-    <!-- <div v-else>Spectators do not have portfolios! You can change your role in <RouterLink :to="{ name: 'Settings' }"> Settings. </RouterLink></div> -->
   </main>
 </template>
 

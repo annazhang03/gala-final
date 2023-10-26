@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["username", "status"]);
 const emit = defineEmits(["refresh"]);
-const { currentUsername } = storeToRefs(useUserStore());
 
 const rejectConnection = async () => {
   try {

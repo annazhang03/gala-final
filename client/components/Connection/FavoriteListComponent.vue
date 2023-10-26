@@ -1,17 +1,8 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
-import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
-// import CreateReviewForm from "./CreateReviewForm.vue";
-// import EditReviewForm from "./EditReviewForm.vue";
-import FavoriteComponent from "./FavoriteComponent.vue";
 import FanComponent from "./FanComponent.vue";
-
-// const props = defineProps(["username", "own"]);
-
-const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
-// let editing = ref("");
+import FavoriteComponent from "./FavoriteComponent.vue";
 
 const loaded = ref(false);
 let favorites = ref<Array<Record<string, string>>>([]);
@@ -24,7 +15,7 @@ async function getFavorites() {
   } catch (_) {
     return;
   }
-  favorites.value = results; //results.filter((r) => r.to === currentUsername.value && r.status === "pending");
+  favorites.value = results;
 }
 
 async function getFans() {
@@ -34,7 +25,7 @@ async function getFans() {
   } catch (_) {
     return;
   }
-  fans.value = results; //results.filter((r) => r.to === currentUsername.value && r.status === "pending");
+  fans.value = results;
 }
 
 onBeforeMount(async () => {
@@ -45,19 +36,12 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <!-- <div v-if="!props.own">
-    <section v-if="isLoggedIn && props.username !== currentUsername">
-      <h3>Create a review:</h3>
-      <CreateReviewForm :username="props.username" @refreshReviews="getReviews" />
-    </section>
-  </div> -->
   <div class="row">
     <h3>favorites:</h3>
   </div>
   <section class="reviews" v-if="loaded && favorites.length !== 0">
     <article v-for="fav in favorites" :key="fav._id">
       <FavoriteComponent :favorite="fav" @refreshFavorites="getFavorites" />
-      <!-- <EditReviewForm v-else :review="review" @refreshReviews="getReviews" @editReview="updateEditing" /> -->
     </article>
   </section>
   <p v-else-if="loaded">no favorites yet!</p>

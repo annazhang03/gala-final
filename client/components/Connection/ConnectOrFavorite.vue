@@ -8,14 +8,11 @@ import FavoriteWithUserComponent from "./FavoriteWithUserComponent.vue";
 
 const props = defineProps(["username"]);
 const { currentUsername } = storeToRefs(useUserStore());
-const connectStatus = ref("");
+const connectStatus = ref<"connected" | "pendingCurr" | "pendingUser" | "notConnected">("notConnected");
 const favoriteStatus = ref(false);
 const fanStatus = ref(false);
 const loaded = ref(false);
 
-// connected || pending curr || pending user || not connected
-// favorited or not
-// fan or not
 async function getConnectStatus() {
   let results;
   try {
@@ -31,11 +28,11 @@ async function getConnectStatus() {
     } catch (_) {
       return;
     }
-    const incoming = results.filter((r) => r.to === currentUsername.value && r.status === "pending").map((r) => r.from);
+    const incoming = results.filter((r: any) => r.to === currentUsername.value && r.status === "pending").map((r: any) => r.from);
     if (incoming.includes(props.username)) {
       connectStatus.value = "pendingCurr";
     } else {
-      const outgoing = results.filter((r) => r.from === currentUsername.value && r.status === "pending").map((r) => r.to);
+      const outgoing = results.filter((r: any) => r.from === currentUsername.value && r.status === "pending").map((r: any) => r.to);
       if (outgoing.includes(props.username)) {
         connectStatus.value = "pendingUser";
       } else {
