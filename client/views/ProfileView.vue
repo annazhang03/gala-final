@@ -7,13 +7,15 @@ import { storeToRefs } from "pinia";
 
 const { currentUsername, currentRole } = storeToRefs(useUserStore());
 const { updateSession } = useUserStore();
-const isArtist = currentRole.value == "artist";
+const isArtist = currentRole.value === "Artist";
 void updateSession();
 </script>
 
 <template>
   <main>
     <h1>{{ currentUsername }}</h1>
+    <RouterLink :to="{ name: 'Connections' }"> <h2>Connections</h2> </RouterLink>
+    <RouterLink :to="{ name: 'Favorites' }"> <h2>Favorites</h2> </RouterLink>
     <div v-if="isArtist">
       <PostListComponent :own="true" />
       <UserReviewsComponent :own="true" />
@@ -23,7 +25,8 @@ void updateSession();
 </template>
 
 <style scoped>
-h1 {
+h1,
+h2 {
   text-align: center;
 }
 </style>

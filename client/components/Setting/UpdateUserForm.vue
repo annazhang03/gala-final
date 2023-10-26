@@ -48,11 +48,11 @@ async function updateRole() {
   <form @submit.prevent="updateRole" class="pure-form">
     <fieldset>
       <legend>Change your role</legend>
-      <input type="radio" id="artist" value="artist" v-model="role" />
-      <label for="artist">artist</label>
+      <input type="radio" id="Artist" value="Artist" v-model="role" />
+      <label for="Artist">artist</label>
 
-      <input type="radio" id="spectator" value="spectator" v-model="role" />
-      <label for="spectator">spectator</label>
+      <input type="radio" id="Spectator" value="Spectator" v-model="role" />
+      <label for="Spectator">spectator</label>
       <button type="submit" class="pure-button pure-button-primary">Update role</button>
     </fieldset>
   </form>

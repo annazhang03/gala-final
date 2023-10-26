@@ -7,18 +7,18 @@ export const useUserStore = defineStore(
   "user",
   () => {
     const currentUsername = ref("");
-    const currentRole = ref("");
+    const currentRole = ref<"Artist" | "Spectator">("Artist");
 
     const isLoggedIn = computed(() => currentUsername.value !== "");
 
     const resetStore = () => {
       currentUsername.value = "";
-      currentRole.value = "";
+      currentRole.value = "Artist";
     };
 
-    const createUser = async (username: string, password: string) => {
+    const createUser = async (username: string, password: string, role: "Artist" | "Spectator" = "Artist") => {
       await fetchy("api/users", "POST", {
-        body: { username, password },
+        body: { username, password, role },
       });
     };
 
@@ -35,7 +35,7 @@ export const useUserStore = defineStore(
         currentRole.value = role;
       } catch {
         currentUsername.value = "";
-        currentRole.value = "";
+        currentRole.value = "Artist";
       }
     };
 
