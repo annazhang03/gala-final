@@ -8,21 +8,48 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import SearchPostForm from "./SearchPostForm.vue";
 
-const { isLoggedIn } = storeToRefs(useUserStore());
+const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
 let posts = ref<Array<Record<string, string>>>([]);
 let editing = ref("");
 let searchAuthor = ref("");
+const props = defineProps(["own", "author"]);
 
 async function getPosts(author?: string) {
-  let query: Record<string, string> = author !== undefined ? { author } : {};
+  let query: Record<string, string> = {};
   let postResults;
-  try {
-    postResults = await fetchy("api/posts", "GET", { query });
-  } catch (_) {
-    return;
+  if (props.author !== undefined || author !== undefined) {
+    if (props.author !== undefined) {
+      query = { author: props.author };
+    } else if (author !== undefined) {
+      query = { author };
+    }
+    try {
+      postResults = await fetchy("api/posts", "GET", { query });
+    } catch (_) {
+      return;
+    }
+  } else {
+    try {
+      postResults = await fetchy("api/feed", "GET");
+    } catch (_) {
+      return;
+    }
   }
+  // if (props.author !== undefined) {
+  //   query = { author: props.author };
+  // } else if (author !== undefined) {
+  //   query = { author };
+  // } else {
+  //   query = {};
+  // }
+  // let postResults;
+  // try {
+  //   postResults = await fetchy("api/posts", "GET", { query });
+  // } catch (_) {
+  //   return;
+  // }
   searchAuthor.value = author ? author : "";
   posts.value = postResults;
 }
@@ -32,20 +59,27 @@ function updateEditing(id: string) {
 }
 
 onBeforeMount(async () => {
-  await getPosts();
+  // await getPosts();
+  if (props.own) {
+    await getPosts(currentUsername.value);
+    // } else if (props.author) {
+    //   await getPosts(props.author);
+  } else {
+    await getPosts();
+  }
   loaded.value = true;
 });
 </script>
 
 <template>
-  <section v-if="isLoggedIn">
+  <section v-if="isLoggedIn && !props.author">
     <h2>Create a post:</h2>
     <CreatePostForm @refreshPosts="getPosts" />
   </section>
   <div class="row">
     <h2 v-if="!searchAuthor">Posts:</h2>
     <h2 v-else>Posts by {{ searchAuthor }}:</h2>
-    <SearchPostForm @getPostsByAuthor="getPosts" />
+    <SearchPostForm v-if="!props.own && !props.author" @getPostsByAuthor="getPosts" />
   </div>
   <section class="posts" v-if="loaded && posts.length !== 0">
     <article v-for="post in posts" :key="post._id">

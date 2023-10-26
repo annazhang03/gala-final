@@ -7,7 +7,7 @@ import CreateReviewForm from "./CreateReviewForm.vue";
 import EditReviewForm from "./EditReviewForm.vue";
 import ReviewComponent from "./ReviewComponent.vue";
 
-const props = defineProps(["user"]);
+const props = defineProps(["username", "own"]);
 
 const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 let editing = ref("");
@@ -16,7 +16,12 @@ const loaded = ref(false);
 let reviews = ref<Array<Record<string, string>>>([]);
 
 async function getReviews() {
-  let query: Record<string, string> = { subject: props.user.username };
+  let query: Record<string, string>;
+  if (props.own) {
+    query = { subject: currentUsername.value };
+  } else {
+    query = { subject: props.username };
+  }
   let reviewResults;
   try {
     reviewResults = await fetchy("/api/reviews", "GET", { query });
@@ -37,12 +42,15 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn && props.user.username !== currentUsername">
-    <h3>Create a review:</h3>
-    <CreateReviewForm :user="props.user" @refreshReviews="getReviews" />
-  </section>
+  <div v-if="!props.own">
+    <section v-if="isLoggedIn && props.username !== currentUsername">
+      <h3>Create a review:</h3>
+      <CreateReviewForm :username="props.username" @refreshReviews="getReviews" />
+    </section>
+  </div>
   <div class="row">
-    <h3>Reviews for {{ props.user.username }}:</h3>
+    <h3 v-if="!props.own">Reviews for {{ props.username }}:</h3>
+    <h3 v-else>Your reviews:</h3>
   </div>
   <section class="reviews" v-if="loaded && reviews.length !== 0">
     <article v-for="review in reviews" :key="review._id">

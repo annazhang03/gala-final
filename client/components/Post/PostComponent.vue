@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import router from "@/router";
 import { useUserStore } from "@/stores/user";
+import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
-import { formatDate } from "@/utils/formatDate";
 
 const props = defineProps(["post"]);
 const emit = defineEmits(["editPost", "refreshPosts"]);
@@ -16,10 +17,20 @@ const deletePost = async () => {
   }
   emit("refreshPosts");
 };
+
+const toUser = async () => {
+  if (currentUsername.value == props.post.author) {
+    void router.push({ name: "Profile" });
+  } else {
+    void router.push({ path: "/user", query: { username: props.post.author } });
+  }
+};
 </script>
 
 <template>
-  <p class="author">{{ props.post.author }}</p>
+  <button class="btn-small pure-button" @click="toUser">
+    <p class="author">{{ props.post.author }}</p>
+  </button>
   <p>{{ props.post.content }}</p>
   <div class="base">
     <menu v-if="props.post.author == currentUsername">

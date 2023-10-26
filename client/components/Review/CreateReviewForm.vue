@@ -2,14 +2,14 @@
 import { ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 
-const props = defineProps(["user"]);
+const props = defineProps(["username"]);
 const content = ref("");
 const emit = defineEmits(["refreshReviews"]);
 
 const createReview = async (content: string) => {
   try {
     await fetchy("api/reviews", "POST", {
-      body: { content, subject: props.user.username },
+      body: { content, subject: props.username },
     });
   } catch (_) {
     return;
@@ -25,7 +25,7 @@ const emptyForm = () => {
 
 <template>
   <form @submit.prevent="createReview(content)">
-    <label for="content">Leave a review for {{ props.user.username }}:</label>
+    <label for="content">Leave a review for {{ props.username }}:</label>
     <textarea id="content" v-model="content" placeholder="Write a review!" required> </textarea>
     <button type="submit" class="pure-button-primary pure-button">Create Review</button>
   </form>

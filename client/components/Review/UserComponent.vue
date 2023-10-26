@@ -6,7 +6,7 @@ const props = defineProps(["user"]);
 
 <template>
   <p class="username">{{ props.user.username }}</p>
-  <UserReviewsComponent :user="props.user" />
+  <UserReviewsComponent :username="props.user.username" />
 </template>
 
 <style scoped>

@@ -4,6 +4,7 @@ import { ref } from "vue";
 
 let username = ref("");
 let password = ref("");
+let role = ref("");
 
 const { updateUser, updateSession } = useUserStore();
 
@@ -15,6 +16,12 @@ async function updateUsername() {
 
 async function updatePassword() {
   await updateUser({ password: password.value });
+  await updateSession();
+  password.value = "";
+}
+
+async function updateRole() {
+  await updateUser({ role: role.value });
   await updateSession();
   password.value = "";
 }
@@ -35,6 +42,18 @@ async function updatePassword() {
       <legend>Change your password</legend>
       <input type="password" placeholder="New password" v-model="password" required />
       <button type="submit" class="pure-button pure-button-primary">Update password</button>
+    </fieldset>
+  </form>
+
+  <form @submit.prevent="updateRole" class="pure-form">
+    <fieldset>
+      <legend>Change your role</legend>
+      <input type="radio" id="artist" value="artist" v-model="role" />
+      <label for="artist">artist</label>
+
+      <input type="radio" id="spectator" value="spectator" v-model="role" />
+      <label for="spectator">spectator</label>
+      <button type="submit" class="pure-button pure-button-primary">Update role</button>
     </fieldset>
   </form>
 </template>

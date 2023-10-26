@@ -5,7 +5,9 @@ import { useUserStore } from "@/stores/user";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
+import ProfileView from "../views/ProfileView.vue";
 import SettingView from "../views/SettingView.vue";
+import UserView from "../views/UserView.vue";
 import UsersView from "../views/UsersView.vue";
 
 const router = createRouter({
@@ -33,6 +35,22 @@ const router = createRouter({
           return { name: "Settings" };
         }
       },
+    },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: ProfileView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/user",
+      // path: "/user",
+      name: "User",
+      component: UserView,
+      // props: { username: params },
+      // props: (route) => ({ username: route.query.username }),
+      // props: true,
+      meta: { requiresAuth: true },
     },
     {
       path: "/reviews",
