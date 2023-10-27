@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import JobListComponent from "@/components/Job/JobListComponent.vue";
 import PostListComponent from "@/components/Post/PostListComponent.vue";
 import UserReviewsComponent from "@/components/Review/UserReviewsComponent.vue";
 
@@ -19,6 +20,7 @@ void updateSession();
     <div v-if="isArtist">
       <PostListComponent :own="true" />
       <UserReviewsComponent :own="true" />
+      <JobListComponent :own="true" />
     </div>
     <div v-else>Spectators do not have portfolios! You can change your role in <RouterLink :to="{ name: 'Settings' }"> Settings. </RouterLink></div>
   </main>

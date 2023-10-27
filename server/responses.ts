@@ -134,8 +134,8 @@ export default class Responses {
     if (!job) {
       return job;
     }
-    const employer = await User.getUserById(job.employer);
-    return { ...job, employer: employer.username };
+    const employer = (await User.idsToUsernames([job.employer]))[0];
+    return { ...job, employer: employer };
   }
 
   /**

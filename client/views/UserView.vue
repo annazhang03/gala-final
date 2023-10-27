@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ConnectOrFavorite from "@/components/Connection/ConnectOrFavorite.vue";
+import JobListComponent from "@/components/Job/JobListComponent.vue";
 import PostListComponent from "@/components/Post/PostListComponent.vue";
 import UserReviewsComponent from "@/components/Review/UserReviewsComponent.vue";
 
@@ -10,7 +11,7 @@ import { onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 
 const currentRoute = useRoute();
-const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
+const { currentUsername } = storeToRefs(useUserStore());
 const { updateSession } = useUserStore();
 void updateSession();
 
@@ -29,6 +30,7 @@ onBeforeMount(async () => {
     <ConnectOrFavorite :username="$route.query.username" />
     <PostListComponent :author="$route.query.username" />
     <UserReviewsComponent :username="$route.query.username" />
+    <JobListComponent :employer="$route.query.username" />
   </main>
 </template>
 

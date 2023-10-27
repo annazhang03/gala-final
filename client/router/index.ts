@@ -5,6 +5,7 @@ import { useUserStore } from "@/stores/user";
 import ConnectionsView from "../views/ConnectionsView.vue";
 import FavoritesView from "../views/FavoritesView.vue";
 import HomeView from "../views/HomeView.vue";
+import JobsView from "../views/JobsView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import ProfileView from "../views/ProfileView.vue";
@@ -54,6 +55,12 @@ const router = createRouter({
       path: "/reviews",
       name: "Reviews",
       component: UsersView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/jobs",
+      name: "Jobs",
+      component: JobsView,
       meta: { requiresAuth: true },
     },
     {

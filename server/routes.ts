@@ -268,12 +268,19 @@ class Routes {
   }
 
   @Router.get("/jobs")
-  async getJobs(status?: "Active" | "Inactive") {
+  async getJobs(status?: "Active" | "Inactive", employer?: string) {
     let jobs;
-    if (status) {
+    if (employer) {
+      const id = (await User.getUserByUsername(employer))._id;
+      if (status) {
+        jobs = await Job.getJobs({ status, employer: id });
+      } else {
+        jobs = await Job.getJobs({ employer: id });
+      }
+    } else if (status) {
       jobs = await Job.getJobByStatus(status);
     } else {
-      jobs = await Job.getJobs();
+      jobs = await Job.getJobs({});
     }
     return await Responses.jobs(jobs);
   }
@@ -288,6 +295,13 @@ class Routes {
     const user = WebSession.getUser(session);
     await Job.isEmployer(job, user);
     return await Responses.job(await Job.getJobWithApplicants(job));
+  }
+
+  @Router.get("/jobs/applied")
+  async getJobsApplied(session: WebSessionDoc) {
+    const user = WebSession.getUser(session);
+    // await Job.isEmployer(job, user);
+    return await Responses.jobs(await Job.getJobsApplied(user));
   }
 
   @Router.post("/job")

@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { Filter, ObjectId } from "mongodb";
 
 import DocCollection, { BaseDoc } from "../framework/doc";
 import { NotAllowedError, NotFoundError } from "./errors";
@@ -56,14 +56,29 @@ export default class JobConcept {
     return this.sanitizeJob(job);
   }
 
-  async getJobs() {
+  async getJobs(query: Filter<JobDoc>) {
+    const jobs = await this.jobs.readMany(
+      query,
+      {
+        sort: { dateUpdated: -1 },
+      }, // todo dont show list of applicants
+    );
+    return jobs.map((j) => this.sanitizeJob(j));
+  }
+
+  async getJobsApplied(applicant: ObjectId) {
     const jobs = await this.jobs.readMany(
       {},
       {
         sort: { dateUpdated: -1 },
       }, // todo dont show list of applicants
     );
-    return jobs.map((j) => this.sanitizeJob(j));
+    const appliedJobs = jobs.filter((j) => j.applicants.map((a) => a.toString()).includes(applicant.toString()));
+    return appliedJobs.map((j) => this.sanitizeJob(j));
+  }
+
+  async getByEmployer(employer: ObjectId) {
+    return await this.getJobs({ employer });
   }
 
   async getJobByStatus(status: "Active" | "Inactive") {
