@@ -470,6 +470,12 @@ class Routes {
     return await Responses.portfolio(portfolioObj);
   }
 
+  @Router.get("/feature/:user")
+  async hasApplied(session: WebSessionDoc) {
+    const user = WebSession.getUser(session);
+    return await Feature.hasApplied(user);
+  }
+
   @Router.post("/featured")
   async apply(session: WebSessionDoc) {
     const user = WebSession.getUser(session);

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import JobListComponent from "@/components/Job/JobListComponent.vue";
+import FeatureComponent from "@/components/Feature/FeatureComponent.vue";
 </script>
 
 <template>
   <main>
-    <h1>jobs</h1>
-    <JobListComponent />
+    <h1>featured artist</h1>
+    <FeatureComponent />
   </main>
 </template>
 

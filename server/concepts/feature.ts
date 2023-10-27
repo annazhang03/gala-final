@@ -40,6 +40,15 @@ export default class FavoriteConcept {
     return feature;
   }
 
+  async hasApplied(user: ObjectId) {
+    const feature = await this.features.readOne({ user });
+    if (feature === null) {
+      return false;
+    } else {
+      return feature.status === "Active";
+    }
+  }
+
   async withdraw(user: ObjectId) {
     await this.isActive(user);
     const feature = await this.features.readOne({ user });

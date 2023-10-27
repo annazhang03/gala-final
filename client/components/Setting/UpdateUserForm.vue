@@ -32,7 +32,7 @@ async function updateRole() {
   <form @submit.prevent="updateUsername" class="pure-form">
     <fieldset>
       <legend>Change your username</legend>
-      <input type="text" placeholder="New username" v-model="username" required />
+      <input type="text" placeholder="New username" v-model="username" required @keydown.space.prevent />
       <button type="submit" class="pure-button pure-button-primary">Update username</button>
     </fieldset>
   </form>

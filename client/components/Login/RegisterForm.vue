@@ -22,7 +22,7 @@ async function register() {
     <fieldset>
       <div class="pure-control-group">
         <label for="aligned-name">Username</label>
-        <input v-model.trim="username" type="text" id="aligned-name" placeholder="Username" required />
+        <input v-model.trim="username" type="text" id="aligned-name" placeholder="Username" required @keydown.space.prevent />
       </div>
       <div class="pure-control-group">
         <label for="aligned-password">Password</label>

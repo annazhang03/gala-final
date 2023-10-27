@@ -14,6 +14,9 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
       <h1 v-if="isLoggedIn">welcome {{ currentUsername }}!</h1>
       <h1 v-else>please login!</h1>
     </section>
+    <section>
+      <h2>see today's <RouterLink :to="{ name: 'Featured' }"> featured artist </RouterLink></h2>
+    </section>
     <PostListComponent />
   </main>
 </template>

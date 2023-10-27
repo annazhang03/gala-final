@@ -6,6 +6,7 @@ import AllMessagesView from "../views/AllMessagesView.vue";
 import ConnectionsView from "../views/ConnectionsView.vue";
 import CreatePortfolioView from "../views/CreatePortfolioView.vue";
 import FavoritesView from "../views/FavoritesView.vue";
+import FeaturedArtistView from "../views/FeaturedArtistView.vue";
 import HomeView from "../views/HomeView.vue";
 import JobsView from "../views/JobsView.vue";
 import LoginView from "../views/LoginView.vue";
@@ -87,6 +88,12 @@ const router = createRouter({
       path: "/favorites",
       name: "Favorites",
       component: FavoritesView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/featured",
+      name: "Featured",
+      component: FeaturedArtistView,
       meta: { requiresAuth: true },
     },
     {

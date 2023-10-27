@@ -15,7 +15,7 @@ let posts = ref<Array<Record<string, string>>>([]);
 let bio = ref("");
 let editing = ref("");
 let searchAuthor = ref("");
-const props = defineProps(["own", "author", "isPortfolio", "owner"]);
+const props = defineProps(["own", "author", "isPortfolio", "owner", "featured"]);
 
 async function getPosts(author?: string) {
   let query: Record<string, string> = {};
@@ -68,7 +68,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn && !props.author">
+  <section v-if="!props.featured && isLoggedIn && !props.author && (!props.isPortfolio || currentUsername === props.owner)">
     <h2>Create a post:</h2>
     <CreatePostForm @refreshPosts="getPosts" />
   </section>
