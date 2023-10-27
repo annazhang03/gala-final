@@ -4,6 +4,8 @@ import { useUserStore } from "@/stores/user";
 import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
+import CommentsComponent from "../Comment/CommentsComponent.vue";
+import LikesComponent from "../Post/LikesComponent.vue";
 
 const props = defineProps(["post"]);
 const emit = defineEmits(["editPost", "refreshPosts"]);
@@ -32,6 +34,8 @@ const toUser = async () => {
     <p class="author">{{ props.post.author }}</p>
   </button>
   <p>{{ props.post.content }}</p>
+  <div><CommentsComponent :post="props.post" /></div>
+  <div><LikesComponent :post="props.post" /></div>
   <div class="base">
     <menu v-if="props.post.author == currentUsername">
       <li><button class="btn-small pure-button" @click="emit('editPost', props.post._id)">Edit</button></li>

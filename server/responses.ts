@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Post, User } from "./app";
-import { CommentAuthorNotMatchError } from "./concepts/comment";
+import { CommentAuthorNotMatchError, CommentDoc } from "./concepts/comment";
 import { AlreadyConnectedError, ConnectionNotFoundError, ConnectionRequestAlreadyExistsError, ConnectionRequestDoc, ConnectionRequestNotFoundError } from "./concepts/connection";
 import { AlreadyFavoritedError, FavoriteNotFoundError } from "./concepts/favorite";
 import { FeatureActiveError, FeatureInactiveError } from "./concepts/feature";
@@ -70,7 +70,7 @@ export default class Responses {
   /**
    * Convert CommentDoc into more readable format for the frontend by converting the author id into a username.
    */
-  static async comments(comments: LikeDoc[]) {
+  static async comments(comments: CommentDoc[]) {
     const authors = await User.idsToUsernames(comments.map((comment) => comment.author));
     return comments.map((comment, i) => ({ ...comment, author: authors[i] }));
   }

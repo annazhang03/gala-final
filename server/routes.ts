@@ -465,7 +465,7 @@ class Routes {
     return await Feature.withdraw(user);
   }
 
-  @Router.get("/comments")
+  @Router.get("/comments/:post")
   async getComments(post: ObjectId) {
     const comments = await Comment.getComments(post);
     return Responses.comments(comments);
@@ -491,7 +491,7 @@ class Routes {
     return await Comment.delete(comment);
   }
 
-  @Router.get("/likes")
+  @Router.get("/likes/:post")
   async getLikes(post: ObjectId) {
     const likes = await Like.getLikes(post);
     return Responses.likes(likes);
@@ -503,7 +503,7 @@ class Routes {
     return await Like.like(post, user);
   }
 
-  @Router.delete("/like")
+  @Router.delete("/like/:post")
   async deleteLike(session: WebSessionDoc, post: ObjectId) {
     const user = WebSession.getUser(session);
     await Like.alreadyLiked(user, post);
