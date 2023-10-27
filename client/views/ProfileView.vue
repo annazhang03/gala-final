@@ -5,6 +5,7 @@ import UserReviewsComponent from "@/components/Review/UserReviewsComponent.vue";
 
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
+// import SinglePortfolioComponent from "../components/Portfolio/SinglePortfolioComponent.vue";
 
 const { currentUsername, currentRole } = storeToRefs(useUserStore());
 const { updateSession } = useUserStore();
@@ -15,10 +16,12 @@ void updateSession();
 <template>
   <main>
     <h1>{{ currentUsername }}</h1>
+    <RouterLink :to="{ name: 'Portfolios' }"> <h2>portfolios</h2> </RouterLink>
     <RouterLink :to="{ name: 'Connections' }"> <h2>Connections</h2> </RouterLink>
     <RouterLink :to="{ name: 'Favorites' }"> <h2>Favorites</h2> </RouterLink>
     <div v-if="isArtist">
-      <PostListComponent :own="true" />
+      <PostListComponent :isPortfolio="true" :owner="currentUsername" />
+      <!-- <PostListComponent :own="true" /> -->
       <UserReviewsComponent :own="true" />
       <JobListComponent :own="true" />
     </div>

@@ -4,14 +4,15 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import AllMessagesView from "../views/AllMessagesView.vue";
 import ConnectionsView from "../views/ConnectionsView.vue";
+import CreatePortfolioView from "../views/CreatePortfolioView.vue";
 import FavoritesView from "../views/FavoritesView.vue";
 import HomeView from "../views/HomeView.vue";
 import JobsView from "../views/JobsView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
+import PortfoliosView from "../views/PortfoliosView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import SettingView from "../views/SettingView.vue";
-import UserView from "../views/UserView.vue";
 import UsersView from "../views/UsersView.vue";
 
 const router = createRouter({
@@ -47,14 +48,8 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: "/user",
-      name: "User",
-      component: UserView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: "/reviews",
-      name: "Reviews",
+      path: "/users",
+      name: "Users",
       component: UsersView,
       meta: { requiresAuth: true },
     },
@@ -62,6 +57,18 @@ const router = createRouter({
       path: "/jobs",
       name: "Jobs",
       component: JobsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/portfolios",
+      name: "Portfolios",
+      component: PortfoliosView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/create",
+      name: "Create Portfolio",
+      component: CreatePortfolioView,
       meta: { requiresAuth: true },
     },
     {

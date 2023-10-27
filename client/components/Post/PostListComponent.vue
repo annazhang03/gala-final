@@ -12,31 +12,43 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
 let posts = ref<Array<Record<string, string>>>([]);
+let bio = ref("");
 let editing = ref("");
 let searchAuthor = ref("");
-const props = defineProps(["own", "author"]);
+const props = defineProps(["own", "author", "isPortfolio", "owner"]);
 
 async function getPosts(author?: string) {
   let query: Record<string, string> = {};
   let postResults;
-  if (props.author !== undefined || author !== undefined) {
-    if (props.author !== undefined) {
-      query = { author: props.author };
-    } else if (author !== undefined) {
-      query = { author };
-    }
+  if (props.isPortfolio) {
     try {
-      postResults = await fetchy("api/posts", "GET", { query });
+      const portfolio = await fetchy(`/api/portfolio/${props.owner}`, "GET");
+      postResults = portfolio.content;
+      bio.value = portfolio.bio;
     } catch (_) {
       return;
     }
   } else {
-    try {
-      postResults = await fetchy("api/feed", "GET");
-    } catch (_) {
-      return;
+    if (props.author !== undefined || author !== undefined) {
+      if (props.author !== undefined) {
+        query = { author: props.author };
+      } else if (author !== undefined) {
+        query = { author };
+      }
+      try {
+        postResults = await fetchy("api/posts", "GET", { query });
+      } catch (_) {
+        return;
+      }
+    } else {
+      try {
+        postResults = await fetchy("api/feed", "GET");
+      } catch (_) {
+        return;
+      }
     }
   }
+
   searchAuthor.value = author ? author : "";
   posts.value = postResults;
 }
@@ -60,10 +72,14 @@ onBeforeMount(async () => {
     <h2>Create a post:</h2>
     <CreatePostForm @refreshPosts="getPosts" />
   </section>
-  <div class="row">
+  <div v-if="!props.isPortfolio" class="row">
     <h2 v-if="!searchAuthor">Posts:</h2>
     <h2 v-else>Posts by {{ searchAuthor }}:</h2>
     <SearchPostForm v-if="!props.own && !props.author" @getPostsByAuthor="getPosts" />
+  </div>
+  <div v-else>
+    <h2>bio: {{ bio }}</h2>
+    <h2>posts:</h2>
   </div>
   <section class="posts" v-if="loaded && posts.length !== 0">
     <article v-for="post in posts" :key="post._id">

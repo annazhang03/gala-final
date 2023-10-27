@@ -7,7 +7,7 @@ import { fetchy } from "../../utils/fetchy";
 import CommentsComponent from "../Comment/CommentsComponent.vue";
 import LikesComponent from "../Post/LikesComponent.vue";
 
-const props = defineProps(["post"]);
+const props = defineProps(["post", "justContent", "noChanges"]);
 const emit = defineEmits(["editPost", "refreshPosts"]);
 const { currentUsername } = storeToRefs(useUserStore());
 
@@ -24,19 +24,19 @@ const toUser = async () => {
   if (currentUsername.value == props.post.author) {
     void router.push({ name: "Profile" });
   } else {
-    void router.push({ path: "/user", query: { username: props.post.author } });
+    void router.push({ path: "/users", query: { username: props.post.author } });
   }
 };
 </script>
 
 <template>
-  <button class="btn-small pure-button" @click="toUser">
+  <button v-if="!justContent" class="btn-small pure-button" @click="toUser">
     <p class="author">{{ props.post.author }}</p>
   </button>
   <p>{{ props.post.content }}</p>
-  <div><CommentsComponent :post="props.post" /></div>
-  <div><LikesComponent :post="props.post" /></div>
-  <div class="base">
+  <div v-if="!justContent"><CommentsComponent :post="props.post" /></div>
+  <div v-if="!justContent"><LikesComponent :post="props.post" /></div>
+  <div v-if="!justContent && !noChanges" class="base">
     <menu v-if="props.post.author == currentUsername">
       <li><button class="btn-small pure-button" @click="emit('editPost', props.post._id)">Edit</button></li>
       <li><button class="button-error btn-small pure-button" @click="deletePost">Delete</button></li>

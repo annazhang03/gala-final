@@ -1,12 +1,24 @@
 <script setup lang="ts">
-import UserReviewsComponent from "./UserReviewsComponent.vue";
+import router from "@/router";
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 
 const props = defineProps(["user"]);
+const { currentUsername } = storeToRefs(useUserStore());
+
+const toUser = async () => {
+  if (currentUsername.value == props.user.username) {
+    void router.push({ name: "Profile" });
+  } else {
+    void router.push({ path: "/users", query: { username: props.user.username } });
+  }
+};
 </script>
 
 <template>
-  <p class="username">{{ props.user.username }}</p>
-  <UserReviewsComponent :username="props.user.username" />
+  <button class="btn-small pure-button" @click="toUser">
+    <p class="username">{{ props.user.username }}</p>
+  </button>
 </template>
 
 <style scoped>

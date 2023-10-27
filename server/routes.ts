@@ -441,7 +441,16 @@ class Routes {
       contentIds.push(postObj._id);
     }
     const created = await Portfolio.create(user, contentIds, bio);
+    await User.update(user, { portfolio: created.portfolio?._id });
     return { msg: created.msg, portfolio: await Responses.portfolio(created.portfolio) };
+  }
+
+  @Router.patch("/portfolio/:portfolio")
+  async updatePortfolio(session: WebSessionDoc, portfolio: ObjectId) {
+    const user = WebSession.getUser(session);
+    await Portfolio.isOwner(user, portfolio);
+    await User.canHavePortfolio(user);
+    return await User.update(user, { portfolio });
   }
 
   @Router.delete("/portfolio/:_id")

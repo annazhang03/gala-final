@@ -8,17 +8,19 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
 <template>
   <main>
-    <h1>Home Page</h1>
+    <h1>gala</h1>
+    <h2>global artist linking app</h2>
     <section>
-      <h1 v-if="isLoggedIn">Welcome {{ currentUsername }}!</h1>
-      <h1 v-else>Please login!</h1>
+      <h1 v-if="isLoggedIn">welcome {{ currentUsername }}!</h1>
+      <h1 v-else>please login!</h1>
     </section>
     <PostListComponent />
   </main>
 </template>
 
 <style scoped>
-h1 {
+h1,
+h2 {
   text-align: center;
 }
 </style>
