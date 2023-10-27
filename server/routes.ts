@@ -371,6 +371,14 @@ class Routes {
     return Responses.messages(messages);
   }
 
+  @Router.get("/messages/:user")
+  async getMessagesWithUser(session: WebSessionDoc, user: string) {
+    const user1 = WebSession.getUser(session);
+    const id2 = (await User.getUserByUsername(user))._id;
+    const messages = await Message.getMessagesWithUser(user1, id2);
+    return Responses.messages(messages);
+  }
+
   @Router.get("/messages/unread")
   async getUnreadMessages(session: WebSessionDoc, user2?: string) {
     const user1 = WebSession.getUser(session);

@@ -13,37 +13,63 @@ export default class MessageConcept {
   public readonly messages = new DocCollection<MessageDoc>("messages");
 
   async getMessages(user: ObjectId) {
-    const messages = await this.messages.readMany({
-      $or: [{ from: user }, { to: user }],
-    });
+    const messages = await this.messages.readMany(
+      {
+        $or: [{ from: user }, { to: user }],
+      },
+      {
+        sort: { dateUpdated: -1 },
+      },
+    );
+    // const likes = await this.likes.readMany(
+    //   { post },
+    //   {
+    //     sort: { dateUpdated: -1 },
+    //   },
+    // );
     return messages;
   }
 
   async getUnreadMessages(user: ObjectId) {
-    const messages = await this.messages.readMany({
-      read: false,
-      to: user,
-    });
+    const messages = await this.messages.readMany(
+      {
+        read: false,
+        to: user,
+      },
+      {
+        sort: { dateUpdated: -1 },
+      },
+    );
     messages.forEach((m) => this.markRead(m._id));
     return messages;
   }
 
   async getMessagesWithUser(user1: ObjectId, user2: ObjectId) {
-    const messages = await this.messages.readMany({
-      $or: [
-        { from: user1, to: user2 },
-        { from: user2, to: user1 },
-      ],
-    });
+    const messages = await this.messages.readMany(
+      {
+        $or: [
+          { from: user1, to: user2 },
+          { from: user2, to: user1 },
+        ],
+      },
+      {
+        sort: { dateUpdated: -1 },
+      },
+    );
     return messages;
   }
 
   async getUnreadMessagesWithUser(user1: ObjectId, user2: ObjectId) {
-    const messages = await this.messages.readMany({
-      read: false,
-      from: user2,
-      to: user1,
-    });
+    const messages = await this.messages.readMany(
+      {
+        read: false,
+        from: user2,
+        to: user1,
+      },
+      {
+        sort: { dateUpdated: -1 },
+      },
+    );
     messages.forEach((m) => this.markRead(m._id));
     return messages;
   }

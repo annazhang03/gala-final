@@ -2,6 +2,7 @@ import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
+import AllMessagesView from "../views/AllMessagesView.vue";
 import ConnectionsView from "../views/ConnectionsView.vue";
 import FavoritesView from "../views/FavoritesView.vue";
 import HomeView from "../views/HomeView.vue";
@@ -61,6 +62,12 @@ const router = createRouter({
       path: "/jobs",
       name: "Jobs",
       component: JobsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/messages",
+      name: "Messages",
+      component: AllMessagesView,
       meta: { requiresAuth: true },
     },
     {
