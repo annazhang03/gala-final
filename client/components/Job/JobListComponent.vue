@@ -22,7 +22,9 @@ let appliedJobs = ref<Array<Record<string, string>>>([]);
 
 async function getJobs(employer?: string) {
   let query: Record<string, string> = {};
-  if (employer) {
+  if (props.own) {
+    query = { employer: currentUsername.value };
+  } else if (employer) {
     query = { employer: employer };
   }
   let jobResults;
