@@ -34,7 +34,6 @@ const toUser = async () => {
     <ConnectOrFavorite :username="$route.query.username" />
     <button class="btn-small pure-button" @click="toUser">message</button>
     <PostListComponent :isPortfolio="true" :owner="$route.query.username" />
-    <!-- <PostListComponent :author="$route.query.username" /> -->
     <UserReviewsComponent :username="$route.query.username" />
     <JobListComponent :employer="$route.query.username" />
   </main>

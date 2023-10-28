@@ -16,7 +16,7 @@ void updateSession();
 <template>
   <main>
     <h1>{{ currentUsername }}</h1>
-    <RouterLink :to="{ name: 'Portfolios' }"> <h2>portfolios</h2> </RouterLink>
+    <RouterLink v-if="currentRole === 'Artist'" :to="{ name: 'Portfolios' }"> <h2>portfolios</h2> </RouterLink>
     <RouterLink :to="{ name: 'Connections' }"> <h2>Connections</h2> </RouterLink>
     <RouterLink :to="{ name: 'Favorites' }"> <h2>Favorites</h2> </RouterLink>
     <div v-if="isArtist">

@@ -83,35 +83,31 @@ class Routes {
   }
 
   @Router.get("/feed")
-  async getFeed(session: WebSessionDoc) {
+  async getFeed() {
+    const posts = await Post.getPosts({});
+    const feed: PostDoc[] = [];
+    for (const post of posts) {
+      if (await User.userActive(post.author)) {
+        const author = await User.getUserById(post.author);
+        if (author.role === "Artist") {
+          feed.push(post);
+        }
+      }
+    }
+    return Responses.posts(feed);
+  }
+
+  @Router.get("/feed/friends")
+  async getFeedWithFriends(session: WebSessionDoc) {
     const user = WebSession.getUser(session);
     const posts = await Post.getPosts({});
-    let feed: PostDoc[] = [];
-    let currentPosts: PostDoc[] = [];
-    let currentDate = undefined;
+    const feed: PostDoc[] = [];
     for (const post of posts) {
-      if (currentDate === undefined || post.dateUpdated > currentDate) {
-        currentPosts.push(post);
-        currentDate = new Date(post.dateUpdated.getFullYear(), post.dateUpdated.getMonth(), post.dateUpdated.getDate());
-      } else {
-        const connected: PostDoc[] = [];
-        const favorited: PostDoc[] = [];
-        const other: PostDoc[] = [];
-        while (currentPosts.length !== 0) {
-          const p = currentPosts.shift();
-          if (p) {
-            if (await Connection.areConnected(p.author, user)) {
-              connected.push(p);
-            } else if (await Favorite.isFavorited(user, p.author)) {
-              favorited.push(p);
-            } else {
-              other.push(p);
-            }
-          }
+      if (await User.userActive(post.author)) {
+        const author = await User.getUserById(post.author);
+        if (author.role === "Artist" && ((await Connection.areConnected(post.author, user)) || (await Favorite.isFavorited(user, post.author)))) {
+          feed.push(post);
         }
-        feed = feed.concat(...connected, ...favorited, ...other);
-        currentPosts = [post];
-        currentDate = new Date(post.dateUpdated.getFullYear(), post.dateUpdated.getMonth(), post.dateUpdated.getDate());
       }
     }
     return Responses.posts(feed);
@@ -121,6 +117,10 @@ class Routes {
   async createPost(session: WebSessionDoc, content: string, options?: PostOptions) {
     const user = WebSession.getUser(session);
     const created = await Post.create(user, content, options);
+    const portfolio = await User.getPortfolio(user);
+    if (portfolio && created.post) {
+      await Portfolio.addPostToPortfolio(created.post._id, portfolio);
+    }
     return { msg: created.msg, post: await Responses.post(created.post) };
   }
 
@@ -425,6 +425,9 @@ class Routes {
   async getUserPortfolio(owner: string) {
     const id = (await User.getUserByUsername(owner))._id;
     const portfolio = await User.getPortfolio(id);
+    if (!portfolio) {
+      return undefined;
+    }
     const portfolioObj = await Portfolio.getPortfolioById(portfolio);
     return await Responses.portfolio(portfolioObj);
   }
@@ -466,6 +469,10 @@ class Routes {
   async getFeatured() {
     const feature = await Feature.getFeatured();
     const portfolio = await User.getPortfolio(feature.user);
+    if (!portfolio) {
+      // won't get here
+      throw new Error("No portfolio!");
+    }
     const portfolioObj = await Portfolio.getPortfolioById(portfolio);
     return await Responses.portfolio(portfolioObj);
   }
@@ -479,6 +486,10 @@ class Routes {
   @Router.post("/featured")
   async apply(session: WebSessionDoc) {
     const user = WebSession.getUser(session);
+    const portfolio = await User.getPortfolio(user);
+    if (!portfolio) {
+      throw new Error("Must have portfolio to apply to be featured!");
+    }
     return await Feature.apply(user);
   }
 

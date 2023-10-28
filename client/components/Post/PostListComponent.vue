@@ -13,8 +13,10 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 const loaded = ref(false);
 let posts = ref<Array<Record<string, string>>>([]);
 let bio = ref("");
+let portfolioRef = ref();
 let editing = ref("");
 let searchAuthor = ref("");
+let showOnlyFriends = ref(false);
 const props = defineProps(["own", "author", "isPortfolio", "owner", "featured"]);
 
 async function getPosts(author?: string) {
@@ -23,6 +25,7 @@ async function getPosts(author?: string) {
   if (props.isPortfolio) {
     try {
       const portfolio = await fetchy(`/api/portfolio/${props.owner}`, "GET");
+      portfolioRef.value = portfolio;
       postResults = portfolio.content;
       bio.value = portfolio.bio;
     } catch (_) {
@@ -41,10 +44,18 @@ async function getPosts(author?: string) {
         return;
       }
     } else {
-      try {
-        postResults = await fetchy("api/feed", "GET");
-      } catch (_) {
-        return;
+      if (showOnlyFriends.value) {
+        try {
+          postResults = await fetchy("api/feed/friends", "GET");
+        } catch (_) {
+          return;
+        }
+      } else {
+        try {
+          postResults = await fetchy("api/feed", "GET");
+        } catch (_) {
+          return;
+        }
       }
     }
   }
@@ -55,6 +66,11 @@ async function getPosts(author?: string) {
 
 function updateEditing(id: string) {
   editing.value = id;
+}
+
+async function togglePostsPref() {
+  showOnlyFriends.value = !showOnlyFriends.value;
+  await getPosts();
 }
 
 onBeforeMount(async () => {
@@ -78,17 +94,26 @@ onBeforeMount(async () => {
     <SearchPostForm v-if="!props.own && !props.author" @getPostsByAuthor="getPosts" />
   </div>
   <div v-else>
-    <h2>bio: {{ bio }}</h2>
-    <h2>posts:</h2>
+    <div v-if="!portfolioRef">no portfolio yet!</div>
+    <div v-else>
+      <h2>bio: {{ bio }}</h2>
+      <h2>posts:</h2>
+    </div>
   </div>
-  <section class="posts" v-if="loaded && posts.length !== 0">
-    <article v-for="post in posts" :key="post._id">
-      <PostComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
-      <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
-    </article>
-  </section>
-  <p v-else-if="loaded">No posts found</p>
-  <p v-else>Loading...</p>
+  <div v-if="isLoggedIn && !props.own && !props.isPortfolio && !props.featured" class="row">
+    <button v-if="showOnlyFriends" class="btn-small pure-button" @click="togglePostsPref">show all posts</button>
+    <button v-else class="btn-small pure-button" @click="togglePostsPref">show posts only from connections and favorites</button>
+  </div>
+  <div v-if="!(props.isPortfolio && !portfolioRef)">
+    <section class="posts" v-if="loaded && posts.length !== 0">
+      <article v-for="post in posts" :key="post._id">
+        <PostComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+        <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+      </article>
+    </section>
+    <p v-else-if="loaded">No posts found</p>
+    <p v-else>Loading...</p>
+  </div>
 </template>
 
 <style scoped>

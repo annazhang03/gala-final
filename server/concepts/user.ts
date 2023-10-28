@@ -32,6 +32,11 @@ export default class UserConcept {
     return this.sanitizeUser(user);
   }
 
+  async userActive(_id: ObjectId) {
+    const maybeUser = await this.users.readOne({ _id });
+    return maybeUser !== null;
+  }
+
   async getUserByUsername(username: string) {
     const user = await this.users.readOne({ username });
     if (user === null) {
@@ -85,9 +90,6 @@ export default class UserConcept {
 
   async getPortfolio(_id: ObjectId) {
     const maybePortfolio = (await this.users.readOne({ _id }))?.portfolio;
-    if (!maybePortfolio) {
-      throw new NotFoundError("User does not have a portfolio!");
-    }
     return maybePortfolio;
   }
 
