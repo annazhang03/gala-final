@@ -48,7 +48,7 @@ const updatePortfolio = async (portfolio: string) => {
       <form @submit.prevent="updatePortfolio(portfolios[selected - 1]._id)">
         <div id="app">
           <select v-model="selected">
-            <option v-for="n in portfolios.length" :value="n" :key="n">{{ n }}</option>
+            <option v-for="n in portfolios.length" :value="n" :key="n">Portfolio {{ n }}</option>
           </select>
         </div>
         <button type="submit" class="pure-button-primary pure-button">set new portfolio</button>
@@ -73,9 +73,19 @@ section {
   gap: 1em;
 }
 
-li {
-  list-style: decimal;
+ol {
+  counter-reset: item;
+  list-style-type: none;
 }
+
+ol li:before {
+  content: "Portfolio " counter(item, decimal) ". ";
+  counter-increment: item;
+}
+
+/* li {
+  list-style: decimal;
+} */
 
 article {
   margin-top: 2em;
@@ -87,7 +97,7 @@ form {
 }
 
 select {
-  width: 4em;
+  width: 10em;
   text-align: center;
   margin: 1em;
 }
