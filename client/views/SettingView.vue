@@ -3,6 +3,7 @@ import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import UpdateUserForm from "../components/Setting/UpdateUserForm.vue";
+import SpectatorInformation from "../components/User/SpectatorInformation.vue";
 
 const { currentUsername } = storeToRefs(useUserStore());
 const { logoutUser, deleteUser } = useUserStore();
@@ -21,6 +22,7 @@ async function delete_() {
 <template>
   <main class="column">
     <RouterLink :to="{ name: 'Profile' }"> <h3>back to profile</h3> </RouterLink>
+    <SpectatorInformation />
     <h1>settings for {{ currentUsername }}</h1>
     <button class="pure-button pure-button-primary" @click="logout">logout</button>
     <button class="button-error pure-button" @click="delete_">delete account</button>
@@ -32,6 +34,7 @@ async function delete_() {
 main {
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   padding-bottom: 1em;
+  text-align: center;
 }
 h3 {
   display: flex;

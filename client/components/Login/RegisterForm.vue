@@ -47,6 +47,11 @@ async function register() {
 </template>
 
 <style scoped>
+.info {
+  text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
 h3 {
   display: flex;
   justify-content: center;
