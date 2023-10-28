@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import UserComponent from "@/components/User/UserComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 import JobApplicantsComponent from "./JobApplicantsComponent.vue";
+
 const props = defineProps(["job", "appliedJobs"]);
 const emit = defineEmits(["editJob", "refreshJobs"]);
 const { currentUsername } = storeToRefs(useUserStore());
@@ -46,9 +48,10 @@ const markInactive = async () => {
 </script>
 
 <template>
-  <p class="employer">{{ props.job.employer }}</p>
-  <p>{{ props.job.content }}</p>
-  <p>status: {{ props.job.status.toLowerCase() }}</p>
+  <p class="employer"><UserComponent :user="$props.job.employer" /></p>
+  <p class="content">{{ props.job.content }}</p>
+  <p v-if="props.job.status === 'Active'" class="status">status: {{ props.job.status.toLowerCase() }}</p>
+  <p v-else>status: {{ props.job.status.toLowerCase() }}</p>
   <div v-if="props.job.employer !== currentUsername">
     <p>applicants: {{ job.numApplicants }}</p>
   </div>
@@ -59,7 +62,7 @@ const markInactive = async () => {
     <menu v-if="props.job.employer == currentUsername">
       <li><button class="btn-small pure-button" @click="emit('editJob', props.job._id)">edit</button></li>
       <li><button class="button-error btn-small pure-button" @click="deleteJob">delete</button></li>
-      <li v-if="job.status === 'Active'"><button class="button-error btn-small pure-button" @click="markInactive">mark inactive</button></li>
+      <li v-if="job.status === 'Active'"><button class="button-error btn-small pure-button" style="background-color: var(--violet)" @click="markInactive">mark inactive</button></li>
     </menu>
     <menu v-else>
       <li v-if="props.appliedJobs.includes(props.job._id)"><button class="btn-small pure-button" @click="withdrawJob">withdraw</button></li>
@@ -73,8 +76,28 @@ const markInactive = async () => {
 </template>
 
 <style scoped>
+.content {
+  font-size: 1.5em;
+  padding: 1em;
+}
+
+.base .pure-button {
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+  border-color: rgb(137, 136, 136);
+}
+
+.base .button-error {
+  background-color: rgb(137, 136, 136);
+}
+
 p {
   margin: 0em;
+}
+
+.status {
+  font-style: italic;
 }
 
 .employer {

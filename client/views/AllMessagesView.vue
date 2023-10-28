@@ -21,19 +21,22 @@ onBeforeMount(async () => {
 
 <template>
   <main>
-    <h1>messages</h1>
     <div v-if="$route.query.username === undefined">
+      <h1>messages</h1>
       <AllUsersMessaged />
     </div>
     <div v-else>
-      <RouterLink :to="{ name: 'Messages' }"> <h2>back to all messages</h2> </RouterLink>
+      <RouterLink :to="{ name: 'Messages' }"> <h3>back to all messages</h3> </RouterLink>
+      <h1>messages</h1>
       <MessagesComponent :user="$route.query.username" />
     </div>
   </main>
 </template>
 
 <style scoped>
-h1 {
+h1,
+h3 {
   text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 </style>

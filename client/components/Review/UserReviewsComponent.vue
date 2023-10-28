@@ -42,27 +42,36 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div v-if="!props.own">
-    <section v-if="isLoggedIn && props.username !== currentUsername">
-      <h3>Create a review:</h3>
-      <CreateReviewForm :username="props.username" @refreshReviews="getReviews" />
+  <div class="reviewsList">
+    <div v-if="!props.own">
+      <section v-if="isLoggedIn && props.username !== currentUsername">
+        <h2>create a review:</h2>
+        <CreateReviewForm :username="props.username" @refreshReviews="getReviews" />
+      </section>
+    </div>
+    <div class="row">
+      <h2 v-if="!props.own">reviews for {{ props.username }}:</h2>
+      <h2 v-else>your reviews:</h2>
+    </div>
+    <section class="reviews" v-if="loaded && reviews.length !== 0">
+      <article v-for="review in reviews" :key="review._id">
+        <ReviewComponent v-if="editing !== review._id" :review="review" @refreshReviews="getReviews" @editReview="updateEditing" />
+        <EditReviewForm v-else :review="review" @refreshReviews="getReviews" @editReview="updateEditing" />
+      </article>
+    </section>
+    <section v-else>
+      <h3 v-if="loaded">no reviews found</h3>
+      <h3 v-else>loading...</h3>
     </section>
   </div>
-  <div class="row">
-    <h3 v-if="!props.own">Reviews for {{ props.username }}:</h3>
-    <h3 v-else>Your reviews:</h3>
-  </div>
-  <section class="reviews" v-if="loaded && reviews.length !== 0">
-    <article v-for="review in reviews" :key="review._id">
-      <ReviewComponent v-if="editing !== review._id" :review="review" @refreshReviews="getReviews" @editReview="updateEditing" />
-      <EditReviewForm v-else :review="review" @refreshReviews="getReviews" @editReview="updateEditing" />
-    </article>
-  </section>
-  <p v-else-if="loaded">No reviews found</p>
-  <p v-else>Loading...</p>
 </template>
 
 <style scoped>
+.reviewsList {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  padding-bottom: 2em;
+}
+
 section {
   display: flex;
   flex-direction: column;
@@ -85,7 +94,7 @@ article {
   padding: 1em;
 }
 
-.reviews {
+.posts {
   padding: 1em;
 }
 

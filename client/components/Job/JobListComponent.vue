@@ -83,34 +83,56 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn && !props.employer">
-    <h2>post a job:</h2>
-    <CreateJobForm @refreshJobs="getJobs" />
-  </section>
-  <div class="row">
-    <h2 v-if="!searchEmployer">jobs:</h2>
-    <h2 v-else>jobs from {{ searchEmployer }}:</h2>
-    <SearchJobForm v-if="!props.own && !props.employer" @getJobsByEmployer="getJobs" />
+  <div class="jobsList">
+    <section v-if="isLoggedIn && !props.employer">
+      <h2>post a job:</h2>
+      <CreateJobForm @refreshJobs="getJobs" />
+    </section>
+    <div class="row">
+      <h2 v-if="props.own">your jobs</h2>
+      <h2 v-else-if="!searchEmployer">jobs:</h2>
+      <h2 v-else>jobs from {{ searchEmployer }}:</h2>
+      <SearchJobForm v-if="!props.own && !props.employer" @getJobsByEmployer="getJobs" />
+    </div>
+    <section class="jobs" v-if="loaded && jobs.length !== 0">
+      <div class="row">
+        <div v-if="isLoggedIn && !props.own">
+          <button v-if="hideInactiveJobs" class="btn-small pure-button" @click="toggleActivePref">show active and inactive jobs</button>
+          <button v-else class="btn-small pure-button" @click="toggleActivePref">show only active jobs</button>
+        </div>
+        <div v-if="isLoggedIn && !props.own">
+          <button v-if="showOnlyAppliedJobs" class="btn-small pure-button" @click="toggleAppliedPref">show all jobs</button>
+          <button v-else class="btn-small pure-button" @click="toggleAppliedPref">show only applied jobs</button>
+        </div>
+      </div>
+      <article v-for="job in jobs" :key="job._id">
+        <JobComponent v-if="editing !== job._id" :job="job" :appliedJobs="appliedJobs.map((j: any) => j._id)" @refreshJobs="getJobsAndStatus" @editJob="updateEditing" />
+        <EditJobForm v-else :job="job" @refreshJobs="getJobsAndStatus" @editJob="updateEditing" />
+      </article>
+    </section>
+    <section v-else>
+      <h3 v-if="loaded">no jobs found</h3>
+      <h3 v-else>loading...</h3>
+    </section>
   </div>
-  <div v-if="isLoggedIn && !props.own" class="row">
-    <button v-if="hideInactiveJobs" class="btn-small pure-button" @click="toggleActivePref">show active and inactive jobs</button>
-    <button v-else class="btn-small pure-button" @click="toggleActivePref">show only active jobs</button>
-  </div>
-  <div v-if="isLoggedIn && !props.own" class="row">
-    <button v-if="showOnlyAppliedJobs" class="btn-small pure-button" @click="toggleAppliedPref">show all jobs</button>
-    <button v-else class="btn-small pure-button" @click="toggleAppliedPref">show only applied jobs</button>
-  </div>
-  <section class="jobs" v-if="loaded && jobs.length !== 0">
-    <article v-for="job in jobs" :key="job._id">
-      <JobComponent v-if="editing !== job._id" :job="job" :appliedJobs="appliedJobs.map((j: any) => j._id)" @refreshJobs="getJobsAndStatus" @editJob="updateEditing" />
-      <EditJobForm v-else :job="job" @refreshJobs="getJobsAndStatus" @editJob="updateEditing" />
-    </article>
-  </section>
-  <p v-else-if="loaded">no jobs found</p>
-  <p v-else>loading...</p>
 </template>
 
 <style scoped>
+.pure-button {
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+  background-color: var(--violet);
+  font-size: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  color: white;
+}
+
+.jobsList {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  padding-bottom: 2em;
+}
+
 section {
   display: flex;
   flex-direction: column;
@@ -133,7 +155,7 @@ article {
   padding: 1em;
 }
 
-.jobs {
+.posts {
   padding: 1em;
 }
 

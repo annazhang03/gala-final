@@ -27,21 +27,26 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="row">
-    <h2 v-if="!searchUser">All Users:</h2>
-    <h2 v-else>{{ searchUser }}:</h2>
-    <SearchUserForm @getUserByUsername="getUsers" />
+  <div class="users">
+    <div class="row">
+      <h2 v-if="!searchUser">all users:</h2>
+      <h2 v-else>{{ searchUser }}:</h2>
+      <SearchUserForm @getUserByUsername="getUsers" />
+    </div>
+    <section class="users" v-if="loaded && users.length !== 0">
+      <article v-for="user in users" :key="user._id">
+        <UserComponent :user="user.username" @refreshUsers="getUsers" />
+      </article>
+    </section>
+    <p v-else-if="loaded">no users found</p>
+    <p v-else>loading...</p>
   </div>
-  <section class="users" v-if="loaded && users.length !== 0">
-    <article v-for="user in users" :key="user._id">
-      <UserComponent :user="user" @refreshUsers="getUsers" />
-    </article>
-  </section>
-  <p v-else-if="loaded">No users found</p>
-  <p v-else>Loading...</p>
 </template>
 
 <style scoped>
+.users {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
 section {
   display: flex;
   flex-direction: column;

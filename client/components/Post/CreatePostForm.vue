@@ -24,9 +24,9 @@ const emptyForm = () => {
 
 <template>
   <form @submit.prevent="createPost(content)">
-    <label for="content">Post Contents:</label>
-    <textarea id="content" v-model="content" placeholder="Create a post!" required> </textarea>
-    <button type="submit" class="pure-button-primary pure-button">Create Post</button>
+    <label for="content"></label>
+    <textarea id="content" v-model="content" placeholder="add some content!" required> </textarea>
+    <button type="submit" class="pure-button-primary pure-button">post</button>
   </form>
 </template>
 
@@ -42,10 +42,19 @@ form {
 
 textarea {
   font-family: inherit;
-  font-size: inherit;
-  height: 6em;
+  font-size: 0.9em;
+  height: 7em;
   padding: 0.5em;
-  border-radius: 4px;
+  border-radius: 10px;
   resize: none;
+  border: none;
+  background-color: white;
+}
+
+.pure-button {
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
 }
 </style>

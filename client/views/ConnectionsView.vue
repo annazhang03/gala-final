@@ -12,8 +12,8 @@ void updateSession();
 
 <template>
   <main>
-    <RouterLink :to="{ name: 'Profile' }"> <h2>Back to profile</h2> </RouterLink>
-    <h1>{{ currentUsername }}'s connection requests</h1>
+    <RouterLink :to="{ name: 'Profile' }"> <h3>back to profile</h3> </RouterLink>
+    <h1>connection requests</h1>
     <ConnectionRequestList />
     <h1>{{ currentUsername }}'s connections</h1>
     <ConnectionListComponent />
@@ -22,7 +22,8 @@ void updateSession();
 
 <style scoped>
 h1,
-h2 {
+h3 {
   text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 </style>

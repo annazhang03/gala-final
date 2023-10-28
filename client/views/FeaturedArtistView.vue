@@ -12,5 +12,6 @@ import FeatureComponent from "@/components/Feature/FeatureComponent.vue";
 <style scoped>
 h1 {
   text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 </style>

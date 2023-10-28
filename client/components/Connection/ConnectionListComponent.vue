@@ -23,19 +23,26 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="row">
-    <h3>Your connections:</h3>
+  <div class="connections">
+    <div class="row">
+      <h3>your connections:</h3>
+    </div>
+    <section class="reviews" v-if="loaded && connections.length !== 0">
+      <article v-for="conn in connections" :key="conn._id">
+        <ConnectionComponent :connection="conn" @refreshConnections="getConnections" />
+      </article>
+    </section>
+    <section v-else class="reviews">
+      <p v-if="loaded">no connections yet!</p>
+      <p v-else>loading...</p>
+    </section>
   </div>
-  <section class="reviews" v-if="loaded && connections.length !== 0">
-    <article v-for="conn in connections" :key="conn._id">
-      <ConnectionComponent :connection="conn" @refreshConnections="getConnections" />
-    </article>
-  </section>
-  <p v-else-if="loaded">No connections yet!</p>
-  <p v-else>Loading...</p>
 </template>
 
 <style scoped>
+.connections {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
 section {
   display: flex;
   flex-direction: column;

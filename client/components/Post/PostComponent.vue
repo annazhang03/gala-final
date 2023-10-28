@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import router from "@/router";
+import UserComponent from "@/components/User/UserComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
@@ -19,36 +19,51 @@ const deletePost = async () => {
   }
   emit("refreshPosts");
 };
-
-const toUser = async () => {
-  if (currentUsername.value == props.post.author) {
-    void router.push({ name: "Profile" });
-  } else {
-    void router.push({ path: "/users", query: { username: props.post.author } });
-  }
-};
 </script>
 
 <template>
-  <button v-if="!justContent" class="btn-small pure-button" @click="toUser">
-    <p class="author">{{ props.post.author }}</p>
-  </button>
-  <p>{{ props.post.content }}</p>
-  <div v-if="!justContent"><CommentsComponent :post="props.post" /></div>
-  <div v-if="!justContent"><LikesComponent :post="props.post" /></div>
-  <div v-if="!justContent && !noChanges" class="base">
-    <menu v-if="props.post.author == currentUsername">
-      <li><button class="btn-small pure-button" @click="emit('editPost', props.post._id)">Edit</button></li>
-      <li><button class="button-error btn-small pure-button" @click="deletePost">Delete</button></li>
-    </menu>
-    <article class="timestamp">
-      <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}</p>
-      <p v-else>Created on: {{ formatDate(props.post.dateCreated) }}</p>
-    </article>
+  <div class="post">
+    <div v-if="!justContent">
+      <UserComponent :user="props.post.author" />
+    </div>
+    <div class="content">{{ props.post.content }}</div>
+    <div v-if="!justContent"><CommentsComponent :post="props.post" /></div>
+    <div v-if="!justContent"><LikesComponent :post="props.post" /></div>
+    <div v-if="!justContent && !noChanges" class="base">
+      <menu v-if="props.post.author == currentUsername">
+        <li><button class="btn-small pure-button" @click="emit('editPost', props.post._id)">Edit</button></li>
+        <li><button class="button-error btn-small pure-button" @click="deletePost">Delete</button></li>
+      </menu>
+      <article class="timestamp">
+        <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}</p>
+        <p v-else>Created on: {{ formatDate(props.post.dateCreated) }}</p>
+      </article>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.post {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  /* background-color: #f0efeb; */
+}
+
+.content {
+  font-size: 1.5em;
+  padding: 1em;
+}
+
+.base .pure-button {
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+  border-color: rgb(137, 136, 136);
+}
+
+.base .button-error {
+  background-color: rgb(137, 136, 136);
+}
+
 p {
   margin: 0em;
 }

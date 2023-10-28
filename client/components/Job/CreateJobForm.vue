@@ -24,8 +24,7 @@ const emptyForm = () => {
 
 <template>
   <form @submit.prevent="createJob(content)">
-    <label for="content">job contents:</label>
-    <textarea id="content" v-model="content" placeholder="post a job!" required> </textarea>
+    <textarea id="content" v-model="content" placeholder="add some information!" required> </textarea>
     <button type="submit" class="pure-button-primary pure-button">post job</button>
   </form>
 </template>
@@ -42,10 +41,19 @@ form {
 
 textarea {
   font-family: inherit;
-  font-size: inherit;
-  height: 6em;
+  font-size: 0.9em;
+  height: 7em;
   padding: 0.5em;
-  border-radius: 4px;
+  border-radius: 10px;
   resize: none;
+  border: none;
+  background-color: white;
+}
+
+.pure-button {
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
 }
 </style>

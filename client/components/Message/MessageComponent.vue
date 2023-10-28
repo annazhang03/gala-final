@@ -8,9 +8,9 @@ const { currentUsername } = storeToRefs(useUserStore());
 </script>
 
 <template>
-  <h2 v-if="props.message.to === currentUsername">from: {{ props.message.from }}</h2>
-  <h2 v-else>to: {{ props.message.to }}</h2>
-  <p>{{ props.message.content }}</p>
+  <h3 v-if="props.message.to === currentUsername">from: {{ props.message.from }}</h3>
+  <h3 v-else>to: {{ props.message.to }}</h3>
+  <p class="content">{{ props.message.content }}</p>
   <div class="base">
     <article class="timestamp">
       <p>{{ formatDate(props.message.dateCreated) }}</p>
@@ -21,6 +21,11 @@ const { currentUsername } = storeToRefs(useUserStore());
 <style scoped>
 p {
   margin: 0em;
+}
+
+.content {
+  font-size: 1.5em;
+  padding: 1em;
 }
 
 .author {

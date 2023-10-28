@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import UserComponent from "@/components/User/UserComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
+
 const props = defineProps(["comment"]);
 const emit = defineEmits(["refreshComments"]);
 const { currentUsername } = storeToRefs(useUserStore());
@@ -18,26 +20,41 @@ const deleteComment = async () => {
 </script>
 
 <template>
-  <p class="author">{{ props.comment.author }}</p>
-  <p>{{ props.comment.content }}</p>
-  <div class="base">
-    <menu v-if="props.comment.author == currentUsername">
-      <li><button class="button-error btn-small pure-button" @click="deleteComment">Delete</button></li>
-    </menu>
-    <article class="timestamp">
-      <p>Created on: {{ formatDate(props.comment.dateCreated) }}</p>
-    </article>
+  <div class="comment">
+    <div class="author">
+      <UserComponent style="background-color: lightgray" :user="props.comment.author" />
+    </div>
+    <div class="content">
+      <p>{{ props.comment.comment }}</p>
+    </div>
+    <div class="base">
+      <div v-if="props.comment.author == currentUsername">
+        <button class="button-error btn-small pure-button" @click="deleteComment">delete</button>
+      </div>
+      <article class="timestamp">
+        <p>{{ formatDate(props.comment.dateCreated) }}</p>
+      </article>
+    </div>
   </div>
 </template>
 
 <style scoped>
-p {
-  margin: 0em;
+.comment {
+  border-radius: 20px;
+  background-color: white;
+  padding: 0.5em;
+  margin: 0.5em;
+}
+.author {
+  font-weight: 200;
+  font-size: 0.8em;
+  padding-top: 0.5em;
 }
 
-.author {
-  font-weight: bold;
-  font-size: 1.2em;
+.content {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 0.9em;
+  padding-right: 1em;
 }
 
 menu {
@@ -52,17 +69,26 @@ menu {
 .timestamp {
   display: flex;
   justify-content: flex-end;
-  font-size: 0.9em;
+  font-size: 0.7em;
   font-style: italic;
+  padding-right: 1em;
+  padding-left: 1em;
 }
 
 .base {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1em;
 }
 
 .base article:only-child {
   margin-left: auto;
+}
+
+.pure-button {
+  background-color: darkgray;
+  border-radius: 8px;
 }
 </style>

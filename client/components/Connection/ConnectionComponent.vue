@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UserComponent from "@/components/User/UserComponent.vue";
 import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["connection"]);
@@ -15,15 +16,25 @@ const deleteConnection = async () => {
 </script>
 
 <template>
-  <p class="author">{{ props.connection }}</p>
+  <p class="author"><UserComponent :user="$props.connection" /></p>
   <div class="base">
     <menu>
-      <li><button class="button-error btn-small pure-button" @click="deleteConnection">Delete</button></li>
+      <li><button class="button-error btn-small pure-button" @click="deleteConnection">delete</button></li>
     </menu>
   </div>
 </template>
 
 <style scoped>
+.base .pure-button {
+  margin-top: 0.5em;
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+}
+.base .button-error {
+  background-color: var(--violet);
+}
 p {
   margin: 0em;
 }

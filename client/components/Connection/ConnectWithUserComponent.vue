@@ -69,6 +69,17 @@ p {
   margin: 0em;
 }
 
+.pure-button {
+  margin-top: 0.5em;
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+  color: white;
+}
+.button-error {
+  background-color: var(--violet);
+}
 .author {
   font-weight: bold;
   font-size: 1.2em;

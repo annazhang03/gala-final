@@ -79,44 +79,19 @@ onBeforeMount(async () => {
 
 <template>
   <div class="base">
-    <ConnectWithUserComponent :username="props.username" :status="connectStatus" @refresh="getStatus" />
+    <div class="connect">
+      <ConnectWithUserComponent :username="props.username" :status="connectStatus" @refresh="getStatus" />
+    </div>
     <FavoriteWithUserComponent :username="props.username" :favoriteStatus="favoriteStatus" :fanStatus="fanStatus" @refresh="getStatus" />
   </div>
 </template>
 
 <style scoped>
-p {
-  margin: 0em;
+.connect {
+  margin-right: 3em;
 }
-
-.author {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-
-menu {
-  list-style-type: none;
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  padding: 0;
-  margin: 0;
-}
-
-.timestamp {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.9em;
-  font-style: italic;
-}
-
 .base {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.base article:only-child {
-  margin-left: auto;
+  justify-content: center;
 }
 </style>

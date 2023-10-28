@@ -28,29 +28,43 @@ const toUser = async () => {
 </script>
 
 <template>
-  <main v-if="$route.query.username !== undefined">
-    <RouterLink :to="{ name: 'Users' }"> <h2>back to all users</h2> </RouterLink>
-    <h1>{{ $route.query.username }}'s profile</h1>
-    <ConnectOrFavorite :username="$route.query.username" />
-    <button class="btn-small pure-button" @click="toUser">message</button>
-    <PostListComponent :isPortfolio="true" :owner="$route.query.username" />
-    <UserReviewsComponent :username="$route.query.username" />
-    <JobListComponent :employer="$route.query.username" />
-  </main>
-  <main v-else>
-    <h1>users</h1>
-    <UserListComponent />
-  </main>
+  <div class="users">
+    <main v-if="$route.query.username !== undefined">
+      <RouterLink :to="{ name: 'Users' }"> <h3>see all users</h3> </RouterLink>
+      <h1>{{ $route.query.username }}'s profile</h1>
+      <ConnectOrFavorite :username="$route.query.username" />
+      <div class="message">
+        <button class="btn-small pure-button" @click="toUser">message</button>
+      </div>
+      <PostListComponent :isPortfolio="true" :owner="$route.query.username" />
+      <UserReviewsComponent :username="$route.query.username" />
+      <JobListComponent :employer="$route.query.username" />
+    </main>
+    <main v-else>
+      <h1>users</h1>
+      <UserListComponent />
+    </main>
+  </div>
 </template>
 
 <style scoped>
+.users {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
 p {
   margin: 0em;
 }
 
-.author {
-  font-weight: bold;
-  font-size: 1.2em;
+.message {
+  text-align: center;
+}
+.pure-button {
+  margin-top: 0.5em;
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+  color: white;
 }
 
 menu {
@@ -62,23 +76,8 @@ menu {
   margin: 0;
 }
 
-.timestamp {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.9em;
-  font-style: italic;
-}
-
-.base {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.base article:only-child {
-  margin-left: auto;
-}
-h1 {
+h1,
+h3 {
   text-align: center;
 }
 </style>

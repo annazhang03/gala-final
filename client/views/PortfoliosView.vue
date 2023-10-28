@@ -5,7 +5,7 @@ import ChoosePortfolio from "@/components/Portfolio/ChoosePortfolio.vue";
 
 <template>
   <main>
-    <RouterLink :to="{ name: 'Profile' }"> <h2>back to profile</h2> </RouterLink>
+    <RouterLink :to="{ name: 'Profile' }"> <h3>back to profile</h3> </RouterLink>
     <RouterLink :to="{ name: 'Create Portfolio' }"> <h1>create a new portfolio</h1> </RouterLink>
     <h1>or choose an existing portfolio</h1>
     <ChoosePortfolio />
@@ -13,7 +13,9 @@ import ChoosePortfolio from "@/components/Portfolio/ChoosePortfolio.vue";
 </template>
 
 <style scoped>
-h1 {
+h1,
+h3 {
   text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 </style>

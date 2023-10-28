@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PostListComponent from "@/components/Post/PostListComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 
@@ -8,22 +7,55 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
 <template>
   <main>
-    <h1>gala</h1>
-    <h2>global artist linking app</h2>
     <section>
-      <h1 v-if="isLoggedIn">welcome {{ currentUsername }}!</h1>
-      <h1 v-else>please login!</h1>
+      <h1>GALA</h1>
+      <p>global artist linking app</p>
     </section>
     <section>
-      <h2>see today's <RouterLink :to="{ name: 'Featured' }"> featured artist </RouterLink></h2>
+      <h2 v-if="isLoggedIn">welcome, {{ currentUsername }}!</h2>
+      <h2 v-else>please login!</h2>
     </section>
-    <PostListComponent />
+    <section v-if="isLoggedIn">
+      <p>see today's <RouterLink :to="{ name: 'Featured' }"> featured artist </RouterLink></p>
+    </section>
   </main>
 </template>
 
 <style scoped>
-h1,
-h2 {
+p {
   text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-style: normal;
+  font-size: 2em;
+}
+
+h2 {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 3em;
+  padding-top: 1em;
+  padding-bottom: 0em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 4em;
+  padding-top: 1.5em;
+  padding-bottom: 0em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  background-image: linear-gradient(white, var(--cadet));
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
 }
 </style>

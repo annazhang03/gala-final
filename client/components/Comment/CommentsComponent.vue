@@ -5,10 +5,12 @@ import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 import CommentComponent from "./CommentComponent.vue";
 import CreateCommentForm from "./CreateCommentForm.vue";
+
 const props = defineProps(["post"]);
 const comments = ref({ comments: [], is_expand: false });
 const loaded = ref(false);
 const { isLoggedIn } = storeToRefs(useUserStore());
+const creating = ref(false);
 
 async function getComments() {
   let results;
@@ -20,28 +22,45 @@ async function getComments() {
   comments.value.comments = results;
 }
 
+async function toggleCreating() {
+  creating.value = !creating.value;
+}
+
 onBeforeMount(async () => {
   await getComments();
   loaded.value = true;
 });
 </script>
+
 <template>
-  <section class="jobs" v-if="loaded && comments.comments.length !== 0">
-    <label @click="comments.is_expand = !comments.is_expand">view {{ comments.comments.length }} comments:</label>
-    <article v-for="comment in comments.comments" class="min-item" v-show="comments.is_expand" :key="comment">
-      <CommentComponent :comment="comment" @refreshComments="getComments" />
-    </article>
-  </section>
-  <p v-else-if="loaded">no comments yet!</p>
-  <p v-else>loading...</p>
-  <section v-if="isLoggedIn">
-    <h2>add a comment:</h2>
-    <CreateCommentForm :post="props.post" @refreshComments="getComments" />
-  </section>
+  <div class="comments">
+    <section v-if="loaded && comments.comments.length !== 0">
+      <button class="btn-small pure-button" @click="toggleCreating">{{ comments.comments.length }} comments</button>
+      <article v-for="comment in comments.comments" class="min-item" v-show="creating" :key="comment">
+        <CommentComponent :comment="comment" @refreshComments="getComments" />
+      </article>
+    </section>
+    <p v-else-if="loaded"><button class="btn-small pure-button" @click="toggleCreating">write the first comment</button></p>
+    <p v-else>loading...</p>
+    <section v-if="isLoggedIn">
+      <div v-if="creating">
+        <CreateCommentForm :post="props.post" @refreshComments="getComments" />
+      </div>
+    </section>
+  </div>
 </template>
 
 <style scoped>
 .min-item {
   display: flex;
+}
+
+.comments {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.pure-button {
+  background-color: lightgray;
+  border-radius: 8px;
 }
 </style>

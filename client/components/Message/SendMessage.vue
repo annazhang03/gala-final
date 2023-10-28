@@ -33,7 +33,6 @@ async function toUser(u: string) {
 
 <template>
   <form v-if="!props.user" @submit.prevent="sendMessage(content, to)">
-    <label for="content">send message:</label>
     <input id="to" v-model="to" placeholder="username" required />
     <textarea id="content" v-model="content" placeholder="write a message" required> </textarea>
     <button type="submit" class="pure-button-primary pure-button">send message</button>
@@ -62,5 +61,19 @@ textarea {
   padding: 0.5em;
   border-radius: 4px;
   resize: none;
+  border: none;
+}
+
+input {
+  border: none;
+  padding: 0.5em;
+}
+
+.pure-button {
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+  color: white;
+  background-color: var(--cadet);
 }
 </style>

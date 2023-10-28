@@ -6,10 +6,10 @@ const content = ref("");
 const emit = defineEmits(["refreshComments"]);
 const props = defineProps(["post"]);
 
-const createComment = async (content: string) => {
+const createComment = async (comment: string) => {
   try {
     await fetchy("api/comment", "POST", {
-      body: { post: props.post._id, content },
+      body: { post: props.post._id, comment },
     });
   } catch (_) {
     return;
@@ -25,9 +25,8 @@ const emptyForm = () => {
 
 <template>
   <form @submit.prevent="createComment(content)">
-    <label for="content">comment:</label>
     <textarea id="content" v-model="content" placeholder="write a comment!" required> </textarea>
-    <button type="submit" class="pure-button-primary pure-button">post comment</button>
+    <button type="submit" class="pure-button-primary pure-button">post</button>
   </form>
 </template>
 
@@ -43,10 +42,19 @@ form {
 
 textarea {
   font-family: inherit;
-  font-size: inherit;
-  height: 6em;
+  font-size: 0.9em;
+  height: 1.5em;
   padding: 0.5em;
   border-radius: 4px;
   resize: none;
+  border: none;
+  background-color: white;
+}
+
+.pure-button {
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
 }
 </style>

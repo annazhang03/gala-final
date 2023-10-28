@@ -8,9 +8,9 @@ const emit = defineEmits(["getPostsByAuthor"]);
 <template>
   <form @submit.prevent="emit('getPostsByAuthor', author)" class="pure-form">
     <fieldset>
-      <legend>Search by Author</legend>
-      <input id="author" type="text" v-model="author" placeholder="Username" />
-      <button type="submit" class="pure-button pure-button-primary">Search</button>
+      <legend>search by author</legend>
+      <input id="author" type="text" v-model="author" placeholder="username" />
+      <button type="submit" class="pure-button pure-button-primary">search</button>
     </fieldset>
   </form>
 </template>
@@ -21,5 +21,12 @@ form {
   gap: 0.5em;
   padding: 1em;
   align-items: center;
+}
+
+button {
+  background-color: var(--violet);
+  border-radius: 8px;
+  font-size: 0.9em;
+  margin: 0.5em;
 }
 </style>

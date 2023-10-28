@@ -36,29 +36,39 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="row">
-    <h3>favorites:</h3>
+  <div class="favoritesList">
+    <div class="row">
+      <h2>favorites:</h2>
+    </div>
+    <section class="reviews" v-if="loaded && favorites.length !== 0">
+      <article v-for="fav in favorites" :key="fav._id">
+        <FavoriteComponent :favorite="fav" @refreshFavorites="getFavorites" />
+      </article>
+    </section>
+    <section v-else>
+      <p v-if="loaded">no favorites yet!</p>
+      <p v-else>loading...</p>
+    </section>
+    <div class="row">
+      <h2>fans:</h2>
+    </div>
+    <section class="reviews" v-if="loaded && fans.length !== 0">
+      <article v-for="fan in fans" :key="fan._id">
+        <FanComponent :fan="fan" @refreshFavorites="getFans" />
+      </article>
+    </section>
+    <section v-else>
+      <p v-if="loaded">no fans yet!</p>
+      <p v-else>loading...</p>
+    </section>
   </div>
-  <section class="reviews" v-if="loaded && favorites.length !== 0">
-    <article v-for="fav in favorites" :key="fav._id">
-      <FavoriteComponent :favorite="fav" @refreshFavorites="getFavorites" />
-    </article>
-  </section>
-  <p v-else-if="loaded">no favorites yet!</p>
-  <p v-else>loading...</p>
-  <div class="row">
-    <h3>fans:</h3>
-  </div>
-  <section class="reviews" v-if="loaded && fans.length !== 0">
-    <article v-for="fan in fans" :key="fan._id">
-      <FanComponent :fan="fan" @refreshFavorites="getFans" />
-    </article>
-  </section>
-  <p v-else-if="loaded">no fans yet!</p>
-  <p v-else>loading...</p>
 </template>
 
 <style scoped>
+.favoritesList {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
 section {
   display: flex;
   flex-direction: column;

@@ -7,17 +7,17 @@ const props = defineProps(["user"]);
 const { currentUsername } = storeToRefs(useUserStore());
 
 const toUser = async () => {
-  if (currentUsername.value == props.user.username) {
+  if (currentUsername.value == props.user) {
     void router.push({ name: "Profile" });
   } else {
-    void router.push({ path: "/users", query: { username: props.user.username } });
+    void router.push({ path: "/users", query: { username: props.user } });
   }
 };
 </script>
 
 <template>
   <button class="btn-small pure-button" @click="toUser">
-    <p class="username">{{ props.user.username }}</p>
+    <p class="username">{{ props.user }}</p>
   </button>
 </template>
 
@@ -28,32 +28,12 @@ p {
 
 .username {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.5em;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 
-menu {
-  list-style-type: none;
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  padding: 0;
-  margin: 0;
-}
-
-.timestamp {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.9em;
-  font-style: italic;
-}
-
-.base {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.base article:only-child {
-  margin-left: auto;
+.pure-button {
+  background-color: #bcd4e6;
+  border-radius: 8px;
 }
 </style>

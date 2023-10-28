@@ -3,6 +3,11 @@
 :root {
   --red: rgb(208, 67, 12);
   --base-bg: #f1f3f5;
+  --night: #090C08;
+  --violet: #474056;
+  --taupe: #757083;
+  --cadet: #8A95A5;
+  --green: #B9C6AE;
 }
 
 button.btn-small {

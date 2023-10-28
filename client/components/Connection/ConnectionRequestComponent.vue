@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UserComponent from "@/components/User/UserComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
@@ -37,19 +38,19 @@ const deleteConnection = async () => {
 
 <template>
   <div v-if="props.request.to == currentUsername">
-    <p class="author">{{ props.request.from }}</p>
+    <p class="author"><UserComponent :user="props.request.from" /></p>
     <div class="base">
       <menu>
-        <li><button class="btn-small pure-button" @click="acceptConnection">Accept</button></li>
-        <li><button class="button-error btn-small pure-button" @click="rejectConnection">Reject</button></li>
+        <li><button class="btn-small pure-button" @click="acceptConnection">accept</button></li>
+        <li><button class="button-error btn-small pure-button" @click="rejectConnection">reject</button></li>
       </menu>
     </div>
   </div>
   <div v-else>
-    <p class="author">{{ props.request.to }}</p>
+    <p class="author"><UserComponent :user="props.request.to" /></p>
     <div class="base">
       <menu>
-        <li><button class="button-error btn-small pure-button" @click="deleteConnection">Delete</button></li>
+        <li><button class="button-error btn-small pure-button" @click="deleteConnection">delete</button></li>
       </menu>
     </div>
   </div>
@@ -60,6 +61,16 @@ p {
   margin: 0em;
 }
 
+.base .pure-button {
+  margin-top: 0.5em;
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+}
+.base .button-error {
+  background-color: var(--violet);
+}
 .author {
   font-weight: bold;
   font-size: 1.2em;

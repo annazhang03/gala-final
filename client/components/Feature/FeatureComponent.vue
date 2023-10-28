@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import FeatureAppComponent from "@/components/Feature/FeatureAppComponent.vue";
 import PostListComponent from "@/components/Post/PostListComponent.vue";
+import UserComponent from "@/components/User/UserComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
-import FeatureAppComponent from "@/components/Feature/FeatureAppComponent.vue";
 
 const { currentUsername } = storeToRefs(useUserStore());
 let featuredArtist = ref<Record<string, string>>({});
@@ -39,15 +40,23 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <FeatureAppComponent :applied="status" @refreshFeature="getFeature" />
-  <div v-if="!featuredArtist.owner">no active applicants for featured artist!</div>
-  <div v-else>
-    <h2>{{ featuredArtist.owner }}</h2>
-    <PostListComponent :isPortfolio="true" :owner="featuredArtist.owner" :featured="true" />
+  <div class="feature">
+    <FeatureAppComponent :applied="status" @refreshFeature="getFeature" />
+    <div v-if="!featuredArtist.owner"><h2>no active applicants for featured artist!</h2></div>
+    <div v-else>
+      <h2><UserComponent :user="featuredArtist.owner" /></h2>
+      <PostListComponent :isPortfolio="true" :owner="featuredArtist.owner" :featured="true" />
+    </div>
   </div>
 </template>
 
 <style scoped>
+.feature {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+h2 {
+  text-align: center;
+}
 p {
   margin: 0em;
 }

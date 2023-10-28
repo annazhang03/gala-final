@@ -16,18 +16,18 @@ async function login() {
 
 <template>
   <form class="pure-form pure-form-aligned" @submit.prevent="login">
-    <h3>Login</h3>
+    <h3>login</h3>
     <fieldset>
       <div class="pure-control-group">
-        <label for="aligned-name">Username</label>
-        <input v-model.trim="username" type="text" id="aligned-name" placeholder="Username" required @keydown.space.prevent />
+        <label for="aligned-name">username</label>
+        <input v-model.trim="username" type="text" id="aligned-name" placeholder="username" required @keydown.space.prevent />
       </div>
       <div class="pure-control-group">
-        <label for="aligned-password">Password</label>
-        <input type="password" v-model.trim="password" id="aligned-password" placeholder="Password" required />
+        <label for="aligned-password">password</label>
+        <input type="password" v-model.trim="password" id="aligned-password" placeholder="password" required />
       </div>
       <div class="pure-controls">
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        <button type="submit" class="pure-button pure-button-primary">submit</button>
       </div>
     </fieldset>
   </form>
@@ -37,5 +37,10 @@ async function login() {
 h3 {
   display: flex;
   justify-content: center;
+}
+
+.pure-button {
+  background-color: var(--cadet);
+  border-radius: 8px;
 }
 </style>

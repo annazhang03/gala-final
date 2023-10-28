@@ -20,9 +20,30 @@ async function delete_() {
 
 <template>
   <main class="column">
-    <h1>Settings for {{ currentUsername }}</h1>
-    <button class="pure-button pure-button-primary" @click="logout">Logout</button>
-    <button class="button-error pure-button" @click="delete_">Delete User</button>
+    <RouterLink :to="{ name: 'Profile' }"> <h3>back to profile</h3> </RouterLink>
+    <h1>settings for {{ currentUsername }}</h1>
+    <button class="pure-button pure-button-primary" @click="logout">logout</button>
+    <button class="button-error pure-button" @click="delete_">delete account</button>
     <UpdateUserForm />
   </main>
 </template>
+
+<style scoped>
+main {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  padding-bottom: 1em;
+}
+h3 {
+  display: flex;
+  justify-content: center;
+}
+
+.pure-button {
+  background-color: var(--cadet);
+  border-radius: 8px;
+}
+
+.button-error {
+  background-color: var(--violet);
+}
+</style>

@@ -24,10 +24,10 @@ const withdraw = async () => {
 </script>
 
 <template>
-  <menu>
-    <li v-if="!props.applied"><button class="btn-small pure-button" @click="apply">apply to be featured</button></li>
-    <li v-else><button class="button-error btn-small pure-button" @click="withdraw">withdraw from being featured</button></li>
-  </menu>
+  <div>
+    <button id="apply" v-if="!props.applied" class="btn-small pure-button" @click="apply">apply to be featured</button>
+    <button id="withdraw" v-else class="button-error btn-small pure-button" @click="withdraw">unapply to be featured</button>
+  </div>
 </template>
 
 <style scoped>
@@ -35,34 +35,22 @@ p {
   margin: 0em;
 }
 
-.employer {
-  font-weight: bold;
-  font-size: 1.2em;
+div {
+  text-align: center;
+  font-size: 1em;
+  padding-bottom: 3em;
 }
-
-menu {
-  list-style-type: none;
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  padding: 0;
-  margin: 0;
-}
-
-.timestamp {
-  display: flex;
-  justify-content: flex-end;
+.pure-button {
+  border-radius: 8px;
+  width: auto;
   font-size: 0.9em;
-  font-style: italic;
+  color: white;
 }
 
-.base {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+#apply {
+  background-color: var(--cadet);
 }
-
-.base article:only-child {
-  margin-left: auto;
+#withdraw {
+  background-color: var(--violet);
 }
 </style>

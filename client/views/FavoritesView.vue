@@ -9,14 +9,15 @@ void updateSession();
 
 <template>
   <main>
-    <RouterLink :to="{ name: 'Profile' }"> <h2>back to profile</h2> </RouterLink>
+    <RouterLink :to="{ name: 'Profile' }"> <h3>back to profile</h3> </RouterLink>
     <FavoriteListComponent />
   </main>
 </template>
 
 <style scoped>
 h1,
-h2 {
+h3 {
   text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 </style>

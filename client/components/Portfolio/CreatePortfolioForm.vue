@@ -38,27 +38,42 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <h2>preview your portfolio:</h2>
-  <button @click="reorder">preview portfolio</button>
-  {{ bio }}
-  <div v-for="post in posts2" :key="post.id">
-    <PostComponent :post="post.name" :justContent="true" />
-  </div>
-  <h2>make your portfolio:</h2>
-  <form @submit.prevent="createPortfolio(posts2.map((p: any) => p.name._id).join(), bio)">
-    <h2>your bio:</h2>
-    <textarea id="bio" v-model="bio" placeholder="add a bio" required> </textarea>
-    <h2>edit order of your posts:</h2>
-    <div v-for="post in props.posts" :key="post.id">
+  <div class="create">
+    <h2>preview your portfolio:</h2>
+    <button class="pure-button-primary pure-button" @click="reorder">preview portfolio</button>
+    <h2 style="font-style: italic; font-size: 1.8em; text-align: center">{{ bio }}</h2>
+    <div v-for="post in posts2" :key="post.id">
       <PostComponent :post="post.name" :justContent="true" />
-      <input type="number" placeholder="placement, e.g. 1" v-model="post.id" />
-      <input type="checkbox" v-model="post.show" />
     </div>
-    <button type="submit" class="pure-button-primary pure-button">done!</button>
-  </form>
+    <h2>make your portfolio:</h2>
+    <form @submit.prevent="createPortfolio(posts2.map((p: any) => p.name._id).join(), bio)">
+      <h2>your bio:</h2>
+      <textarea id="bio" v-model="bio" placeholder="add a bio" required> </textarea>
+      <h2>edit order of your posts:</h2>
+      <div class="option" v-for="post in props.posts" :key="post.id">
+        <PostComponent :post="post.name" :justContent="true" />
+        <div>
+          <input class="number" type="number" placeholder="placement, e.g. 1" v-model="post.id" />
+          <input type="checkbox" v-model="post.show" />
+        </div>
+      </div>
+      <button type="submit" class="pure-button-primary pure-button">done!</button>
+    </form>
+  </div>
 </template>
 
 <style scoped>
+.number {
+  width: 2em;
+  margin-right: 1em;
+}
+.option {
+  padding-bottom: 2em;
+}
+.create {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  padding-bottom: 2em;
+}
 form {
   background-color: var(--base-bg);
   border-radius: 1em;
@@ -83,6 +98,12 @@ section {
   gap: 1em;
 }
 
+.pure-button {
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+}
 section,
 p,
 .row {

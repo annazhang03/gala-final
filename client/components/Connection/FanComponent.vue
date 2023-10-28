@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UserComponent from "@/components/User/UserComponent.vue";
 import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["fan"]);
@@ -15,7 +16,7 @@ const removeFan = async () => {
 </script>
 
 <template>
-  <p class="author">{{ props.fan }}</p>
+  <p class="author"><UserComponent :user="props.fan" /></p>
   <div class="base">
     <menu>
       <li><button class="button-error btn-small pure-button" @click="removeFan">remove fan</button></li>
@@ -27,7 +28,12 @@ const removeFan = async () => {
 p {
   margin: 0em;
 }
-
+.base .pure-button {
+  background-color: var(--violet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+}
 .author {
   font-weight: bold;
   font-size: 1.2em;

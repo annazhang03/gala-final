@@ -22,4 +22,11 @@ form {
   padding: 1em;
   align-items: center;
 }
+
+button {
+  background-color: var(--violet);
+  border-radius: 8px;
+  font-size: 0.9em;
+  margin: 0.5em;
+}
 </style>

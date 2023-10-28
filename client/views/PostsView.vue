@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import JobListComponent from "@/components/Job/JobListComponent.vue";
+import PostListComponent from "@/components/Post/PostListComponent.vue";
 </script>
 
 <template>
   <main>
-    <h1>jobs</h1>
-    <JobListComponent />
+    <h1>posts</h1>
+    <PostListComponent />
   </main>
 </template>
 

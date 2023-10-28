@@ -28,29 +28,39 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="row">
-    <h3>incoming connection requests:</h3>
+  <div class="connections">
+    <div class="row">
+      <h3>incoming connection requests:</h3>
+    </div>
+    <section class="reviews" v-if="loaded && incoming.length !== 0">
+      <article v-for="request in incoming" :key="request._id">
+        <ConnectionRequestComponent :request="request" @refreshRequests="getConnectionRequests" />
+      </article>
+    </section>
+    <section v-else class="reviews">
+      <p v-if="loaded">no incoming connection requests!</p>
+      <p v-else>loading...</p>
+    </section>
+
+    <div class="row">
+      <h3>outgoing connection requests:</h3>
+    </div>
+    <section class="reviews" v-if="loaded && outgoing.length !== 0">
+      <article v-for="request in outgoing" :key="request._id">
+        <ConnectionRequestComponent :request="request" @refreshRequests="getConnectionRequests" />
+      </article>
+    </section>
+    <section v-else class="reviews">
+      <p v-if="loaded">no outgoing connection requests!</p>
+      <p v-else>loading...</p>
+    </section>
   </div>
-  <section class="reviews" v-if="loaded && incoming.length !== 0">
-    <article v-for="request in incoming" :key="request._id">
-      <ConnectionRequestComponent :request="request" @refreshRequests="getConnectionRequests" />
-    </article>
-  </section>
-  <p v-else-if="loaded">no incoming connection requests!</p>
-  <p v-else>loading...</p>
-  <div class="row">
-    <h3>outgoing connection requests:</h3>
-  </div>
-  <section class="reviews" v-if="loaded && outgoing.length !== 0">
-    <article v-for="request in outgoing" :key="request._id">
-      <ConnectionRequestComponent :request="request" @refreshRequests="getConnectionRequests" />
-    </article>
-  </section>
-  <p v-else-if="loaded">no outgoing connection requests!</p>
-  <p v-else>loading...</p>
 </template>
 
 <style scoped>
+.connections {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
 section {
   display: flex;
   flex-direction: column;

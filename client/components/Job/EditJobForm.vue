@@ -25,7 +25,7 @@ const editJob = async (content: string) => {
     <div class="base">
       <menu>
         <li><button class="btn-small pure-button-primary pure-button" type="submit">Save</button></li>
-        <li><button class="btn-small pure-button" @click="emit('editJob')">Cancel</button></li>
+        <li><button class="button-error btn-small pure-button" @click="emit('editJob')">Cancel</button></li>
       </menu>
       <p v-if="props.job.dateCreated !== props.job.dateUpdated" class="timestamp">Edited on: {{ formatDate(props.job.dateUpdated) }}</p>
       <p v-else class="timestamp">Created on: {{ formatDate(props.job.dateCreated) }}</p>
@@ -36,17 +36,33 @@ const editJob = async (content: string) => {
 <style scoped>
 form {
   background-color: var(--base-bg);
+  border-radius: 1em;
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  padding: 1em;
+}
+.base .pure-button {
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+  border-color: rgb(137, 136, 136);
+  color: black;
+}
+
+.base .button-error {
+  background-color: rgb(137, 136, 136);
+  color: white;
 }
 
 textarea {
   font-family: inherit;
   font-size: inherit;
   height: 6em;
-  border-radius: 4px;
+  border-radius: 10px;
   resize: none;
+  border: none;
+  padding: 0.5em;
 }
 
 p {

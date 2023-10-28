@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SendMessageForm from "@/components/Message/SendMessage.vue";
+import UserComponent from "@/components/User/UserComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
@@ -41,23 +42,31 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn">
-    <h2>send a message:</h2>
-    <SendMessageForm @refreshMessages="getMessages(props.user)" :user="props.user" />
-  </section>
-  <div class="row">
-    <h2>messages with {{ $props.user }}:</h2>
+  <div class="messagesList">
+    <section v-if="isLoggedIn">
+      <h2>send a message:</h2>
+      <SendMessageForm @refreshMessages="getMessages(props.user)" :user="props.user" />
+    </section>
+    <div class="row">
+      <h2>messages with <UserComponent :user="$props.user" />:</h2>
+    </div>
+    <section class="messages" v-if="loaded && messages.length !== 0">
+      <article v-for="message in messages" :key="message._id">
+        <MessageComponent :message="message" />
+      </article>
+    </section>
+    <section v-else>
+      <p v-if="loaded">no messages yet!</p>
+      <p v-else>loading...</p>
+    </section>
   </div>
-  <section class="messages" v-if="loaded && messages.length !== 0">
-    <article v-for="message in messages" :key="message._id">
-      <MessageComponent :message="message" />
-    </article>
-  </section>
-  <p v-else-if="loaded">no message yet!</p>
-  <p v-else>loading...</p>
 </template>
 
 <style scoped>
+.messagesList {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
 section {
   display: flex;
   flex-direction: column;

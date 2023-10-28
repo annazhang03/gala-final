@@ -5,6 +5,7 @@ import { useUserStore } from "@/stores/user";
 import AllMessagesView from "../views/AllMessagesView.vue";
 import ConnectionsView from "../views/ConnectionsView.vue";
 import CreatePortfolioView from "../views/CreatePortfolioView.vue";
+import ExploreView from "../views/ExploreView.vue";
 import FavoritesView from "../views/FavoritesView.vue";
 import FeaturedArtistView from "../views/FeaturedArtistView.vue";
 import HomeView from "../views/HomeView.vue";
@@ -12,6 +13,7 @@ import JobsView from "../views/JobsView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import PortfoliosView from "../views/PortfoliosView.vue";
+import PostsView from "../views/PostsView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import SettingView from "../views/SettingView.vue";
 import UsersView from "../views/UsersView.vue";
@@ -61,6 +63,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/posts",
+      name: "Posts",
+      component: PostsView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/portfolios",
       name: "Portfolios",
       component: PortfoliosView,
@@ -94,6 +102,12 @@ const router = createRouter({
       path: "/featured",
       name: "Featured",
       component: FeaturedArtistView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/explore",
+      name: "Explore",
+      component: ExploreView,
       meta: { requiresAuth: true },
     },
     {

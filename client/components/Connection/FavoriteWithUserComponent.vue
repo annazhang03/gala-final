@@ -35,7 +35,7 @@ const removeFan = async () => {
 <template>
   <div class="base">
     <menu>
-      <li v-if="props.favoriteStatus"><button class="button-error btn-small pure-button" @click="removeFavorite">unfavorite</button></li>
+      <li v-if="props.favoriteStatus"><button class="button-error btn-small pure-button" @click="removeFavorite">remove from favorites</button></li>
       <li v-else><button class="btn-small pure-button" @click="addFavorite">favorite</button></li>
       <li v-if="props.fanStatus"><button class="button-error btn-small pure-button" @click="removeFan">remove from fans</button></li>
     </menu>
@@ -45,6 +45,18 @@ const removeFan = async () => {
 <style scoped>
 p {
   margin: 0em;
+}
+.pure-button {
+  margin-top: 0.5em;
+  background-color: var(--cadet);
+  border-radius: 8px;
+  width: auto;
+  font-size: 0.9em;
+  color: white;
+}
+
+.button-error {
+  background-color: var(--violet);
 }
 
 .author {

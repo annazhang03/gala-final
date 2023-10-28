@@ -5,8 +5,25 @@ import RegisterForm from "@/components/Login/RegisterForm.vue";
 
 <template>
   <main class="column">
-    <h1>Please login or register!</h1>
-    <LoginForm />
-    <RegisterForm />
+    <h1>welcome to GALA!</h1>
+    <div class="forms">
+      <LoginForm />
+      <RegisterForm />
+    </div>
   </main>
 </template>
+
+<style scoped>
+h1 {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+}
+
+.forms {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+</style>

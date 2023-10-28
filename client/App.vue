@@ -25,32 +25,27 @@ onBeforeMount(async () => {
   <header>
     <nav>
       <div class="title">
-        <img src="@/assets/images/logo.svg" />
-        <RouterLink :to="{ name: 'Home' }">
-          <h1>gala</h1>
-        </RouterLink>
+        <img src="@/assets/images/home.png" />
+        <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> home </RouterLink>
       </div>
-      <ul>
+      <ul v-if="isLoggedIn">
+        <img src="@/assets/images/explore.png" />
         <li>
-          <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> Home </RouterLink>
+          <RouterLink :to="{ name: 'Explore' }" :class="{ underline: currentRouteName == 'Explore' }"> explore </RouterLink>
         </li>
-        <li v-if="isLoggedIn">
-          <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }"> Settings </RouterLink>
-        </li>
-        <li v-else>
-          <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }"> Login </RouterLink>
-        </li>
-        <li v-if="isLoggedIn">
-          <RouterLink :to="{ name: 'Profile' }" :class="{ underline: currentRouteName == 'Profile' }" style="margin-right: 12px"> Profile </RouterLink>
-        </li>
-        <li v-if="isLoggedIn">
-          <RouterLink :to="{ name: 'Jobs' }" :class="{ underline: currentRouteName == 'Jobs' }"> jobs </RouterLink>
-        </li>
-        <li v-if="isLoggedIn">
+        <img src="@/assets/images/messages.png" />
+        <li>
           <RouterLink :to="{ name: 'Messages' }" :class="{ underline: currentRouteName == 'Messages' }"> messages </RouterLink>
         </li>
-        <li v-if="isLoggedIn">
-          <RouterLink :to="{ name: 'Users' }" :class="{ underline: currentRouteName == 'Users' }"> people </RouterLink>
+        <img src="@/assets/images/profile.png" />
+        <li>
+          <RouterLink :to="{ name: 'Profile' }" :class="{ underline: currentRouteName == 'Profile' }"> profile </RouterLink>
+        </li>
+      </ul>
+      <ul v-else>
+        <img src="@/assets/images/login.png" />
+        <li>
+          <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }"> login </RouterLink>
         </li>
       </ul>
     </nav>
@@ -66,9 +61,10 @@ onBeforeMount(async () => {
 
 nav {
   padding: 1em 2em;
-  background-color: lightgray;
+  background-color: var(--taupe);
   display: flex;
   align-items: center;
+  height: 2em;
 }
 
 h1 {
@@ -84,11 +80,12 @@ h1 {
 
 img {
   height: 2em;
+  padding-right: 0em;
 }
 
 a {
   font-size: large;
-  color: black;
+  color: white;
   text-decoration: none;
 }
 
@@ -98,7 +95,17 @@ ul {
   display: flex;
   align-items: center;
   flex-direction: row;
-  gap: 1em;
+  gap: 0.5em;
+}
+
+li {
+  padding-left: 0em;
+  padding-right: 1.5em;
+}
+
+.title,
+li {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 
 .underline {
