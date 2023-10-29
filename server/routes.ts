@@ -135,6 +135,11 @@ class Routes {
   async deletePost(session: WebSessionDoc, _id: ObjectId) {
     const user = WebSession.getUser(session);
     await Post.isAuthor(user, _id);
+    // delete post from all portfolios
+    const portfolios = await Portfolio.getPortfolios(user);
+    for (const p of portfolios) {
+      await Portfolio.removePostFromPortfolio(_id, p._id);
+    }
     return Post.delete(_id);
   }
 

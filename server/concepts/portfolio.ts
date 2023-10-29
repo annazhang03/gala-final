@@ -35,6 +35,16 @@ export default class PortfolioConcept {
     return { msg: "portfolio successfully updated!" };
   }
 
+  async removePostFromPortfolio(post: ObjectId, _id: ObjectId) {
+    const portfolio = await this.portfolios.readOne({ _id });
+    if (!portfolio) {
+      throw new Error(`Portfolio ${_id} does not exist!`);
+    }
+    const newPosts = portfolio.content.filter((p: ObjectId) => p.toString() !== post.toString());
+    await this.portfolios.updateOne({ _id }, { content: newPosts });
+    return { msg: "portfolio successfully updated!" };
+  }
+
   async delete(_id: ObjectId) {
     await this.portfolios.deleteOne({ _id });
     return { msg: "Portfolio deleted successfully!" };
